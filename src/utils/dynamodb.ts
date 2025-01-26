@@ -3,7 +3,7 @@ import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 const createDynamoDBClient = () => {
   const client = new DynamoDBClient({
-    region: "us-east-1",
+    region: "us-east-2",
     credentials: {
       accessKeyId: localStorage.getItem("AWS_ACCESS_KEY_ID") || "",
       secretAccessKey: localStorage.getItem("AWS_SECRET_ACCESS_KEY") || "",
