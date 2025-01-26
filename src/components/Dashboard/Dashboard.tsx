@@ -40,18 +40,7 @@ export const Dashboard = () => {
     return <LoadingSpinner />;
   }
 
-  // Calculate statistics
-  const activeFires = cameras.filter(camera => 
-    allCameraData.some(data => 
-      data.cam_name === camera.id && data.label === "fire"
-    )
-  ).length;
-
-  const averageProbability = allCameraData.length > 0
-    ? (allCameraData.reduce((acc, curr) => acc + (curr.fire_score * 100), 0) / allCameraData.length).toFixed(2)
-    : 0;
-
-  // Get fire alerts
+  // Get fire alerts and calculate active fires
   const fireAlerts = cameras
     .map(camera => {
       const cameraData = allCameraData.filter(data => data.cam_name === camera.id);
@@ -67,6 +56,13 @@ export const Dashboard = () => {
       } : null;
     })
     .filter(Boolean);
+
+  const activeFires = fireAlerts.length;
+
+  // Calculate average probability across all cameras
+  const averageProbability = allCameraData.length > 0
+    ? Number((allCameraData.reduce((acc, curr) => acc + (curr.fire_score * 100), 0) / allCameraData.length).toFixed(2))
+    : 0;
 
   // Prepare chart data
   const chartData = allCameraData
@@ -98,7 +94,7 @@ export const Dashboard = () => {
       <StatCards
         totalCameras={cameras.length}
         activeFires={activeFires}
-        averageProbability={Number(averageProbability)}
+        averageProbability={averageProbability}
         totalReadings={allCameraData.length}
       />
 
