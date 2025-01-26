@@ -59,24 +59,24 @@ export const SingleCamera = () => {
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">{camera.name}</h1>
+        <h1 className="text-2xl font-bold text-gradient">{camera.name}</h1>
         <Link to="/">
-          <Button>Back to Dashboard</Button>
+          <Button variant="outline" className="glass-morphism">Back to Dashboard</Button>
         </Link>
       </div>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div>
+        <div className="glass-morphism rounded-lg p-4">
           <CameraFeed camera={camera} large />
         </div>
         
         <div className="space-y-6">
           {/* Fire Status Alert */}
-          <Alert variant={hasFireDetection ? "destructive" : "default"}>
+          <Alert variant={hasFireDetection ? "destructive" : "default"} className="glass-morphism">
             {hasFireDetection ? (
               <>
                 <AlertTriangle className="h-5 w-5" />
-                <AlertTitle>Fire Detected!</AlertTitle>
+                <AlertTitle className="font-bold">Fire Detected!</AlertTitle>
                 <AlertDescription>
                   This camera has detected potential fire activity. Please check the feed and contact emergency services if necessary.
                 </AlertDescription>
@@ -84,7 +84,7 @@ export const SingleCamera = () => {
             ) : (
               <>
                 <CheckCircle2 className="h-5 w-5" />
-                <AlertTitle>No Fire Detected</AlertTitle>
+                <AlertTitle className="font-bold">No Fire Detected</AlertTitle>
                 <AlertDescription>
                   Current readings indicate normal conditions with no fire detection.
                 </AlertDescription>
@@ -93,8 +93,9 @@ export const SingleCamera = () => {
           </Alert>
 
           {/* Chart Card */}
-          <Card>
+          <Card className="glass-morphism">
             <CardContent className="pt-6">
+              <h2 className="text-lg font-semibold mb-4 text-gradient">Fire Detection Score Timeline</h2>
               {isLoadingDetails ? (
                 <div className="flex items-center justify-center h-32">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
@@ -102,12 +103,18 @@ export const SingleCamera = () => {
               ) : cameraDetails && cameraDetails.length > 0 ? (
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={chartData}>
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                    <LineChart 
+                      data={chartData}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted/20" />
                       <XAxis 
                         dataKey="time" 
                         className="text-xs"
                         tick={{ fill: 'currentColor' }}
+                        angle={-45}
+                        textAnchor="end"
+                        height={60}
                       />
                       <YAxis 
                         className="text-xs"
@@ -116,29 +123,34 @@ export const SingleCamera = () => {
                           value: 'Fire Score (%)', 
                           angle: -90, 
                           position: 'insideLeft',
-                          fill: 'currentColor'
+                          fill: 'currentColor',
+                          style: { textAnchor: 'middle' }
                         }}
                       />
                       <Tooltip 
                         contentStyle={{ 
-                          backgroundColor: 'var(--background)',
-                          border: '1px solid var(--border)',
-                          borderRadius: '0.5rem'
+                          backgroundColor: 'rgba(0,0,0,0.8)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '0.5rem',
+                          color: 'white'
                         }}
+                        labelStyle={{ color: 'white' }}
                       />
                       <Line 
                         type="monotone" 
                         dataKey="fireScore" 
-                        stroke="var(--destructive)" 
+                        stroke="#ef4444"
                         strokeWidth={2}
                         dot={false}
-                        activeDot={{ r: 6 }}
+                        activeDot={{ r: 6, fill: '#ef4444' }}
+                        isAnimationActive={true}
+                        animationDuration={1000}
                       />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
               ) : (
-                <p className="text-muted-foreground">No data available</p>
+                <p className="text-muted-foreground text-center py-8">No data available</p>
               )}
             </CardContent>
           </Card>
