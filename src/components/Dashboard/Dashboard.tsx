@@ -99,10 +99,10 @@ export const Dashboard = () => {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="h-[500px] lg:h-auto">
+        <div className="h-auto order-1 lg:order-none">
           <FireAlerts alerts={fireAlerts} />
         </div>
-        <div className="h-[500px] lg:h-auto">
+        <div className="h-auto order-2 lg:order-none">
           <TrendChart data={chartData} />
         </div>
       </div>
