@@ -30,7 +30,7 @@ serve(async (req) => {
     const SMTP_PASSWORD = Deno.env.get('SMTP_PASSWORD')
     const FROM_EMAIL = Deno.env.get('FROM_EMAIL')
 
-    console.log('Checking SMTP credentials...');
+    console.log('Starting SMS via email process...');
 
     if (!SMTP_USERNAME || !SMTP_PASSWORD || !FROM_EMAIL) {
       throw new Error('Missing SMTP credentials')
@@ -38,7 +38,7 @@ serve(async (req) => {
 
     const { to, message } = await req.json() as SendSMSBody
     
-    console.log('Attempting to send SMS via email to:', to);
+    console.log('Processing request for phone number:', to);
 
     // Remove any formatting from the phone number
     const cleanNumber = to.replace(/\D/g, '');
@@ -55,13 +55,16 @@ serve(async (req) => {
 
     const emailTo = `${phoneNumber}@${carrierGateways.default}`;
     console.log('Target email address:', emailTo);
-    
+
     try {
-      await client.connectTLS({
+      console.log('Attempting SMTP connection...');
+      
+      await client.connect({
         hostname: "smtp.gmail.com",
         port: 587,
         username: SMTP_USERNAME,
         password: SMTP_PASSWORD,
+        tls: true,
       });
 
       console.log('SMTP connection established');
