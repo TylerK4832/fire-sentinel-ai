@@ -1,5 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 
 const createDynamoDBClient = () => {
   const client = new DynamoDBClient({
@@ -17,24 +17,25 @@ const createDynamoDBClient = () => {
   });
 };
 
-export const getCameraData = async (cameraId: string) => {
+export const getCameraDataByName = async (camName: string) => {
   const docClient = createDynamoDBClient();
-  
+
   try {
-    const command = new GetCommand({
-      TableName: "cameras",
-      Key: {
-        id: cameraId,
+    const command = new QueryCommand({
+      TableName: "fire-or-no-fire",
+      IndexName: "cam_name-index", // Replace with your GSI name
+      KeyConditionExpression: "cam_name = :camName",
+      ExpressionAttributeValues: {
+        ":camName": camName,
       },
     });
 
     const response = await docClient.send(command);
-    return response.Item;
+    return response.Items; // Query returns an array of matching items
   } catch (error) {
-    console.error("Error fetching camera data:", error);
+    console.error("Error fetching camera data by name:", error);
     throw error;
   } finally {
-    // Ensure we clean up the client
     if (docClient) {
       // @ts-ignore - TypeScript doesn't know about the destroy method
       docClient.destroy?.();
