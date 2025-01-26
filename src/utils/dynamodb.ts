@@ -1,4 +1,5 @@
 import { supabase } from "../integrations/supabase/client";
+import { useToast } from "../hooks/use-toast";
 
 export const getCameraData = async (cameraId: string) => {
   console.log('Fetching data for camera:', cameraId);
