@@ -1,5 +1,10 @@
 [
     {
+        "name": "Palisades Fire Demo Cam",
+        "id":"PalisadesFireDemoCam",
+        "link":"https://pbs.twimg.com/media/GiAx2ZyX0AAZ1ku?format=jpg&name=large"
+    }, 
+    {
         "name": "Alabama Hills 1",
         "id": "Axis-AlabamaHills1",
         "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AlabamaHills1/latest-frame.jpg"
