@@ -8,10 +8,12 @@ import { useToast } from "../hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { AlertTriangle, CheckCircle2, Flame, Timer, Loader } from "lucide-react";
+import { useIsMobile } from "../hooks/use-mobile";
 
 export const SingleCamera = () => {
   const { id } = useParams();
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   
   const { data: cameras = [] } = useQuery({
     queryKey: ['cameras'],
@@ -43,7 +45,6 @@ export const SingleCamera = () => {
     );
   }
 
-  // Filter data for last 24 hours and format for charts
   const now = Date.now();
   const twentyFourHoursAgo = now - (24 * 60 * 60 * 1000);
   
@@ -57,7 +58,6 @@ export const SingleCamera = () => {
     fireProbability: Number((item.fire_score * 100).toFixed(2))
   }));
 
-  // Calculate analytics data from filtered data
   const hasFireDetection = filteredData.some((item: any) => item.label === "fire");
   const averageFireProbability = chartData.length > 0 
     ? (chartData.reduce((acc, curr) => acc + curr.fireProbability, 0) / chartData.length).toFixed(2)
@@ -68,7 +68,7 @@ export const SingleCamera = () => {
       <h1 className="text-2xl font-bold text-gradient mb-6">{camera.name}</h1>
       
       <div className="grid grid-cols-1 xl:grid-cols-[65%_33%] gap-6">
-        <div className="h-[calc(100vh-12rem)]">
+        <div className="max-h-[50vh] md:max-h-[60vh] xl:h-[calc(100vh-12rem)]">
           <CameraFeed camera={camera} large />
         </div>
         
@@ -81,7 +81,6 @@ export const SingleCamera = () => {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Fire Status Alert */}
             <Alert 
               variant={hasFireDetection ? "destructive" : "default"} 
               className={`glass-morphism ${!hasFireDetection ? 'border-green-500/30 bg-green-500/5' : 'border-red-500/30 bg-red-500/5'}`}
@@ -115,7 +114,6 @@ export const SingleCamera = () => {
               </div>
             </Alert>
 
-            {/* Analytics Cards */}
             <div className="grid grid-cols-2 gap-4 mb-4">
               <Card className="glass-morphism p-4">
                 <div className="flex items-center gap-4">
@@ -137,16 +135,18 @@ export const SingleCamera = () => {
               </Card>
             </div>
 
-            {/* Chart Card */}
             <Card className="glass-morphism">
-              <CardContent className="pt-6">
+              <CardContent className={`pt-6 ${isMobile ? 'px-2' : 'px-6'}`}>
                 <h2 className="text-lg font-semibold mb-4 text-gradient">Last 24 Hours Fire Detection Probability</h2>
                 {chartData.length > 0 ? (
-                  <div className="h-[300px]">
+                  <div className={`${isMobile ? 'h-[250px]' : 'h-[300px]'}`}>
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart 
                         data={chartData}
-                        margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
+                        margin={isMobile ? 
+                          { top: 5, right: 10, left: 0, bottom: 20 } : 
+                          { top: 5, right: 30, left: 20, bottom: 25 }
+                        }
                       >
                         <CartesianGrid strokeDasharray="3 3" className="stroke-muted/20" />
                         <XAxis 
@@ -156,6 +156,7 @@ export const SingleCamera = () => {
                           angle={-45}
                           textAnchor="end"
                           height={60}
+                          interval={isMobile ? 'preserveStartEnd' : 0}
                         />
                         <YAxis 
                           className="text-xs"
