@@ -4,13 +4,28 @@ import {
   QueryCommand,
   GetCommand
 } from "@aws-sdk/lib-dynamodb";
+import { supabase } from "../integrations/supabase/client";
 
-const createDynamoDBClient = () => {
+const createDynamoDBClient = async () => {
+  // Fetch AWS credentials from Supabase secrets
+  const { data: secretData, error: accessKeyError } = await supabase.functions.invoke('get-secret', {
+    body: { name: 'AWS_ACCESS_KEY_ID' }
+  });
+  
+  const { data: secretKeyData, error: secretKeyError } = await supabase.functions.invoke('get-secret', {
+    body: { name: 'AWS_SECRET_ACCESS_KEY' }
+  });
+
+  if (accessKeyError || secretKeyError) {
+    console.error("Error fetching AWS credentials:", accessKeyError || secretKeyError);
+    throw new Error("Failed to fetch AWS credentials");
+  }
+
   const client = new DynamoDBClient({
     region: "us-east-2",
     credentials: {
-      accessKeyId: localStorage.getItem("AWS_ACCESS_KEY_ID") || "",
-      secretAccessKey: localStorage.getItem("AWS_SECRET_ACCESS_KEY") || "",
+      accessKeyId: secretData.value,
+      secretAccessKey: secretKeyData.value,
     },
   });
 
@@ -22,7 +37,7 @@ const createDynamoDBClient = () => {
 };
 
 export const getCameraData = async (id: string) => {
-  const docClient = createDynamoDBClient();
+  const docClient = await createDynamoDBClient();
 
   try {
     const command = new QueryCommand({
@@ -49,7 +64,7 @@ export const getCameraData = async (id: string) => {
 };
 
 export const getCameraDataByName = async (camName: string) => {
-  const docClient = createDynamoDBClient();
+  const docClient = await createDynamoDBClient();
 
   try {
     const command = new QueryCommand({
