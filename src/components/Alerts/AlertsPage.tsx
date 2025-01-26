@@ -72,18 +72,43 @@ export const AlertsPage = () => {
     }
   };
 
+  const formatPhoneNumber = (phone: string): string => {
+    // Remove any non-digit characters
+    const cleaned = phone.replace(/\D/g, '');
+    
+    // For US numbers, add +1 if not present
+    if (cleaned.length === 10) {
+      return `+1${cleaned}`;
+    }
+    // If number already includes country code (11 digits starting with 1)
+    else if (cleaned.length === 11 && cleaned.startsWith('1')) {
+      return `+${cleaned}`;
+    }
+    // Return original input if it's already in E.164 format (starts with +)
+    else if (phone.startsWith('+')) {
+      return phone;
+    }
+    // Return null if invalid format
+    return '';
+  };
+
   const createSubscription = useMutation({
     mutationFn: async () => {
+      const formattedPhone = formatPhoneNumber(phoneNumber);
+      if (!formattedPhone) {
+        throw new Error('Please enter a valid 10-digit US phone number');
+      }
+
       const { error } = await supabase.from("alert_subscriptions").insert({
         user_id: session?.user?.id,
         camera_id: selectedCamera,
-        phone_number: phoneNumber,
+        phone_number: formattedPhone,
       });
 
       if (error) throw error;
 
-      // Send welcome message after successful subscription
-      await sendWelcomeMessage(phoneNumber);
+      // Send welcome message with formatted phone number
+      await sendWelcomeMessage(formattedPhone);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["alert-subscriptions"] });
@@ -178,10 +203,13 @@ export const AlertsPage = () => {
                 </label>
                 <Input
                   type="tel"
-                  placeholder="Enter phone number"
+                  placeholder="Enter 10-digit US phone number"
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                 />
+                <p className="text-sm text-gray-400 mt-1">
+                  Format: 1234567890 (no spaces or special characters)
+                </p>
               </div>
             </div>
             <Button
