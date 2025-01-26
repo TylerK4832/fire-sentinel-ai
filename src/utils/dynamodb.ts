@@ -13,8 +13,8 @@ export const getCameraData = async (cameraId: string) => {
       throw error;
     }
 
-    if (!data) {
-      console.log('No data returned from function');
+    if (!data || !Array.isArray(data)) {
+      console.log('No valid data returned from function');
       return [];
     }
 

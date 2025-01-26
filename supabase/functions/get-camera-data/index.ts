@@ -17,7 +17,13 @@ serve(async (req) => {
   try {
     // Validate request method
     if (req.method !== 'POST') {
-      throw new Error('Method not allowed');
+      return new Response(
+        JSON.stringify({ error: 'Method not allowed' }),
+        { 
+          status: 405, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
     }
 
     // Parse request body
@@ -25,7 +31,13 @@ serve(async (req) => {
     console.log('Received request for camera:', cameraId);
 
     if (!cameraId) {
-      throw new Error('Camera ID is required');
+      return new Response(
+        JSON.stringify({ error: 'Camera ID is required' }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
     }
 
     // Get AWS credentials from environment
@@ -34,7 +46,13 @@ serve(async (req) => {
 
     if (!accessKeyId || !secretAccessKey) {
       console.error('AWS credentials not found');
-      throw new Error('AWS credentials not configured');
+      return new Response(
+        JSON.stringify({ error: 'AWS credentials not configured' }),
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
     }
 
     // Initialize DynamoDB client
@@ -72,7 +90,8 @@ serve(async (req) => {
         headers: { 
           ...corsHeaders,
           'Content-Type': 'application/json'
-        }
+        },
+        status: 200
       }
     );
 
@@ -81,8 +100,8 @@ serve(async (req) => {
     
     return new Response(
       JSON.stringify({ 
-        error: error.message || 'Failed to fetch camera data',
-        details: error.stack 
+        error: 'Failed to fetch camera data',
+        details: error instanceof Error ? error.message : String(error)
       }),
       { 
         status: 500,
