@@ -11,7 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.734.0",
     "@aws-sdk/client-s3": "^3.735.0",
+    "@aws-sdk/lib-dynamodb": "^3.734.0",
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.1.1",
