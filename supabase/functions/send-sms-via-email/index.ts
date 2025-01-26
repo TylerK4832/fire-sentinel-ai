@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
+import { SmtpClient } from "https://deno.land/x/smtp@v0.13.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -28,17 +28,9 @@ serve(async (req) => {
   try {
     const SMTP_USERNAME = Deno.env.get('SMTP_USERNAME')
     const SMTP_PASSWORD = Deno.env.get('SMTP_PASSWORD')
-    const SMTP_HOST = 'smtp.gmail.com'
-    const SMTP_PORT = 587
     const FROM_EMAIL = Deno.env.get('FROM_EMAIL')
 
-    // Log configuration (without sensitive data)
-    console.log('SMTP Configuration:', {
-      host: SMTP_HOST,
-      port: SMTP_PORT,
-      usernameExists: !!SMTP_USERNAME,
-      fromEmailExists: !!FROM_EMAIL
-    });
+    console.log('Checking SMTP credentials...');
 
     if (!SMTP_USERNAME || !SMTP_PASSWORD || !FROM_EMAIL) {
       throw new Error('Missing SMTP credentials')
@@ -59,31 +51,32 @@ serve(async (req) => {
     
     const client = new SmtpClient();
     
-    console.log('Connecting to SMTP server...');
+    console.log('Initializing SMTP client...');
+
+    const emailTo = `${phoneNumber}@${carrierGateways.default}`;
+    console.log('Target email address:', emailTo);
     
     try {
-      await client.connectTLS({
-        hostname: SMTP_HOST,
-        port: SMTP_PORT,
+      await client.connect({
+        hostname: "smtp.gmail.com",
+        port: 587,
         username: SMTP_USERNAME,
         password: SMTP_PASSWORD,
       });
 
-      console.log('Connected to SMTP server successfully');
-
-      // Send to default gateway (Verizon)
-      const emailTo = `${phoneNumber}@${carrierGateways.default}`;
-      console.log('Sending email to:', emailTo);
+      console.log('SMTP connection established');
 
       await client.send({
         from: FROM_EMAIL,
         to: emailTo,
-        subject: "",  // Empty subject for SMS
+        subject: "",
         content: message,
       });
 
-      console.log('Email sent successfully');
+      console.log('Message sent successfully');
+      
       await client.close();
+      console.log('SMTP connection closed');
 
       return new Response(JSON.stringify({ 
         success: true,
@@ -94,7 +87,11 @@ serve(async (req) => {
       });
     } catch (smtpError) {
       console.error('SMTP Error:', smtpError);
-      await client.close().catch(console.error);
+      try {
+        await client.close();
+      } catch (closeError) {
+        console.error('Error closing SMTP connection:', closeError);
+      }
       throw smtpError;
     }
   } catch (error) {
