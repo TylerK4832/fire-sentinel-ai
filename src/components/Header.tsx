@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Bell, Home, LineChart } from "lucide-react";
+import { Bell, Grid, LayoutDashboard } from "lucide-react";
 
 export const Header = () => {
   return (
@@ -11,19 +11,22 @@ export const Header = () => {
             Wildfire Monitor
           </Link>
           <nav className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/">
-                <Home className="h-5 w-5" />
+            <Button variant="ghost" asChild>
+              <Link to="/" className="flex items-center gap-2">
+                <Grid className="h-5 w-5" />
+                <span>All Cameras</span>
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/dashboard">
-                <LineChart className="h-5 w-5" />
+            <Button variant="ghost" asChild>
+              <Link to="/dashboard" className="flex items-center gap-2">
+                <LayoutDashboard className="h-5 w-5" />
+                <span>Dashboard</span>
               </Link>
             </Button>
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/alerts">
+            <Button variant="ghost" asChild>
+              <Link to="/alerts" className="flex items-center gap-2">
                 <Bell className="h-5 w-5" />
+                <span>Alerts</span>
               </Link>
             </Button>
           </nav>
