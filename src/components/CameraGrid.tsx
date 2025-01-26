@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { fetchCamerasFromS3 } from "../utils/s3Client";
+import { getCameras } from "../data/cameras";
 import { CameraFeed } from "./CameraFeed";
 import { useToast } from "../hooks/use-toast";
 
@@ -7,12 +7,12 @@ export const CameraGrid = () => {
   const { toast } = useToast();
   const { data: cameras = [], isLoading } = useQuery({
     queryKey: ['cameras'],
-    queryFn: fetchCamerasFromS3,
+    queryFn: getCameras,
     meta: {
       onError: () => {
         toast({
           title: "Error",
-          description: "Failed to load cameras. Please check your AWS credentials.",
+          description: "Failed to load cameras.",
           variant: "destructive"
         });
       }

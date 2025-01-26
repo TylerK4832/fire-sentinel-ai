@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchCamerasFromS3 } from "../utils/s3Client";
+import { getCameras } from "../data/cameras";
 import { CameraFeed } from "./CameraFeed";
 import { Button } from "./ui/button";
 
@@ -8,7 +8,7 @@ export const SingleCamera = () => {
   const { id } = useParams();
   const { data: cameras = [] } = useQuery({
     queryKey: ['cameras'],
-    queryFn: fetchCamerasFromS3
+    queryFn: getCameras
   });
 
   const camera = cameras.find(c => c.id === id);
