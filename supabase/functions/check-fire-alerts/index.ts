@@ -1,21 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
+import { DynamoDBClient } from "npm:@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, QueryCommand } from "npm:@aws-sdk/lib-dynamodb";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-interface AlertSubscription {
-  id: string;
-  user_id: string;
-  camera_id: string;
-  phone_number: string;
-}
-
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
@@ -35,33 +31,22 @@ serve(async (req) => {
 
     console.log(`Found ${subscriptions?.length || 0} subscriptions to process`);
 
+    // Initialize DynamoDB client
+    const dynamoClient = new DynamoDBClient({
+      region: "us-east-2",
+      credentials: {
+        accessKeyId: Deno.env.get('AWS_ACCESS_KEY_ID')!,
+        secretAccessKey: Deno.env.get('AWS_SECRET_ACCESS_KEY')!,
+      },
+    });
+
+    const docClient = DynamoDBDocumentClient.from(dynamoClient);
+
     // Process each subscription
     for (const sub of subscriptions || []) {
       try {
-        // Query DynamoDB for the latest fire detection for this camera
-        const { data: fireData, error: fireError } = await supabase
-          .functions.invoke('get-secret', {
-            body: { name: 'AWS_ACCESS_KEY_ID' }
-          });
-        
-        const { data: secretKeyData, error: secretKeyError } = await supabase
-          .functions.invoke('get-secret', {
-            body: { name: 'AWS_SECRET_ACCESS_KEY' }
-          });
-
-        if (fireError || secretKeyError) throw fireError || secretKeyError;
-
-        // Create DynamoDB client
-        const dynamoDB = new AWS.DynamoDB.DocumentClient({
-          region: "us-east-2",
-          credentials: {
-            accessKeyId: fireData.value,
-            secretAccessKey: secretKeyData.value,
-          },
-        });
-
         // Query DynamoDB for latest fire detection
-        const params = {
+        const command = new QueryCommand({
           TableName: "fire-or-no-fire",
           IndexName: "cam_name-timestamp-index",
           KeyConditionExpression: "cam_name = :camName",
@@ -70,12 +55,12 @@ serve(async (req) => {
           },
           Limit: 1,
           ScanIndexForward: false, // Get most recent first
-        };
+        });
 
-        const result = await dynamoDB.query(params).promise();
+        const result = await docClient.send(command);
         const latestDetection = result.Items?.[0];
 
-        // If there's a fire detection in the last 10 minutes, send notification
+        // Check if there's a fire detection in the last 10 minutes
         if (latestDetection && 
             latestDetection.label === 'fire' && 
             latestDetection.timestamp > (Date.now()/1000 - 600)) { // 600 seconds = 10 minutes
@@ -86,7 +71,7 @@ serve(async (req) => {
           await supabase.functions.invoke('send-sms-via-email', {
             body: {
               to: sub.phone_number,
-              message: `🔥 FIRE ALERT: Potential fire detected by camera ${sub.camera_id}. Please check the camera feed immediately.`,
+              message: `🔥 FIRE ALERT: Potential fire detected by camera ${sub.camera_id} with ${(latestDetection.fire_score * 100).toFixed(1)}% confidence. Please check immediately.`,
             },
           });
         }
