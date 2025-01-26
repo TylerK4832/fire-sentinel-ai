@@ -5,15 +5,17 @@ import { useToast } from "../hooks/use-toast";
 
 export const CameraGrid = () => {
   const { toast } = useToast();
-  const { data: cameras = [], isLoading, error } = useQuery({
+  const { data: cameras = [], isLoading } = useQuery({
     queryKey: ['cameras'],
     queryFn: fetchCamerasFromS3,
-    onError: () => {
-      toast({
-        title: "Error",
-        description: "Failed to load cameras. Please check your AWS credentials.",
-        variant: "destructive"
-      });
+    meta: {
+      onError: () => {
+        toast({
+          title: "Error",
+          description: "Failed to load cameras. Please check your AWS credentials.",
+          variant: "destructive"
+        });
+      }
     }
   });
 
