@@ -65,7 +65,7 @@ export const SingleCamera = () => {
         </Link>
       </div>
       
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-[60%_38%] gap-6">
         <div className="glass-morphism rounded-lg p-4">
           <CameraFeed camera={camera} large />
         </div>
@@ -74,21 +74,21 @@ export const SingleCamera = () => {
           {/* Fire Status Alert */}
           <Alert 
             variant={hasFireDetection ? "destructive" : "default"} 
-            className={`glass-morphism ${!hasFireDetection && 'border-green-500/30 bg-green-500/5'}`}
+            className={`glass-morphism ${!hasFireDetection ? 'border-green-500/30 bg-green-500/5' : 'border-red-500/30 bg-red-500/5'}`}
           >
             {hasFireDetection ? (
               <>
-                <AlertTriangle className="h-5 w-5" />
-                <AlertTitle className="font-bold">Fire Detected!</AlertTitle>
-                <AlertDescription>
+                <AlertTriangle className="h-8 w-8 text-red-500" />
+                <AlertTitle className="font-bold text-xl">Fire Detected!</AlertTitle>
+                <AlertDescription className="text-lg">
                   This camera has detected potential fire activity. Please check the feed and contact emergency services if necessary.
                 </AlertDescription>
               </>
             ) : (
               <>
-                <CheckCircle2 className="h-5 w-5 text-green-500" />
-                <AlertTitle className="font-bold text-green-500">All Clear - No Fire Detected</AlertTitle>
-                <AlertDescription className="text-green-500/90">
+                <CheckCircle2 className="h-8 w-8 text-green-500" />
+                <AlertTitle className="font-bold text-xl text-green-500">All Clear - No Fire Detected</AlertTitle>
+                <AlertDescription className="text-lg text-green-500/90">
                   Current readings indicate normal conditions with no fire detection.
                 </AlertDescription>
               </>
@@ -104,7 +104,7 @@ export const SingleCamera = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
                 </div>
               ) : cameraDetails && cameraDetails.length > 0 ? (
-                <div className="h-[400px]">
+                <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart 
                       data={chartData}
@@ -142,10 +142,10 @@ export const SingleCamera = () => {
                       <Line 
                         type="monotone" 
                         dataKey="fireScore" 
-                        stroke="#ef4444"
+                        stroke={hasFireDetection ? "#ef4444" : "#22c55e"}
                         strokeWidth={2}
                         dot={false}
-                        activeDot={{ r: 6, fill: '#ef4444' }}
+                        activeDot={{ r: 6, fill: hasFireDetection ? '#ef4444' : '#22c55e' }}
                         isAnimationActive={true}
                         animationDuration={1000}
                       />
