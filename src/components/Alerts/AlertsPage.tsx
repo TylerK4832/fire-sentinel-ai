@@ -7,8 +7,6 @@ import { CurrentSubscriptions } from "./CurrentSubscriptions";
 import { DashboardHeader } from "../Dashboard/DashboardHeader";
 import { Loader2 } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 type AlertSubscription = Database['public']['Tables']['alert_subscriptions']['Row'];
 
@@ -20,24 +18,6 @@ interface SubscriptionFormValues {
 export const AlertsPage = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
-
-  // Check authentication status
-  useEffect(() => {
-    const checkAuth = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast({
-          title: "Authentication Required",
-          description: "Please log in to manage alert subscriptions.",
-          variant: "destructive"
-        });
-        navigate("/auth");
-      }
-    };
-    
-    checkAuth();
-  }, [navigate, toast]);
 
   const { data: cameras = [], isLoading: camerasLoading } = useQuery({
     queryKey: ['cameras'],
@@ -47,9 +27,6 @@ export const AlertsPage = () => {
   const { data: subscriptions = [], isLoading: subscriptionsLoading } = useQuery({
     queryKey: ['alert-subscriptions'],
     queryFn: async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not authenticated");
-
       const { data, error } = await supabase
         .from('alert_subscriptions')
         .select('*');
@@ -74,24 +51,16 @@ export const AlertsPage = () => {
 
   const createSubscription = useMutation({
     mutationFn: async ({ cameraId, phoneNumber }: SubscriptionFormValues) => {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        console.error("No authenticated user found");
-        throw new Error("User not authenticated");
-      }
-
       console.log("Attempting to create subscription with:", {
         camera_id: cameraId,
-        phone_number: phoneNumber,
-        user_id: user.id
+        phone_number: phoneNumber
       });
 
       const { data, error } = await supabase
         .from('alert_subscriptions')
         .insert([{
           camera_id: cameraId,
-          phone_number: phoneNumber,
-          user_id: user.id
+          phone_number: phoneNumber
         }]);
 
       if (error) {

@@ -15,21 +15,21 @@ export type Database = {
           created_at: string
           id: string
           phone_number: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           camera_id: string
           created_at?: string
           id?: string
           phone_number: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           camera_id?: string
           created_at?: string
           id?: string
           phone_number?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }
