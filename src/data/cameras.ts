@@ -1,4 +1,4 @@
-import camerasData from '../../filtered_cameras_full.json';
+import camerasData from '../../filtered_cameras_full_with_demo.json';
 import { Camera } from '../types/camera';
 
 // Define the type for our raw JSON data
