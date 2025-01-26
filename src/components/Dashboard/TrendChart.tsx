@@ -33,7 +33,7 @@ export const TrendChart = ({ data }: TrendChartProps) => {
                 angle={-45}
                 textAnchor="end"
                 height={60}
-                interval={isMobile ? 'preserveStartEnd' : 0}
+                interval={Math.ceil(data.length / (isMobile ? 4 : 8))}
               />
               <YAxis 
                 className="text-xs"

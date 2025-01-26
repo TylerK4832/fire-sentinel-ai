@@ -156,7 +156,7 @@ export const SingleCamera = () => {
                           angle={-45}
                           textAnchor="end"
                           height={60}
-                          interval={isMobile ? 'preserveStartEnd' : 0}
+                          interval={Math.ceil(chartData.length / (isMobile ? 4 : 8))}
                         />
                         <YAxis 
                           className="text-xs"
