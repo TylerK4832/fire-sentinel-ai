@@ -1,34 +1,36 @@
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
-import { Camera } from "../types/camera";
+import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
 
 const s3Client = new S3Client({
-  region: "us-west-1", // Update this to match your bucket's region
+  region: "us-west-1", // Replace with your region
   credentials: {
     accessKeyId: localStorage.getItem("AWS_ACCESS_KEY_ID") || "",
-    secretAccessKey: localStorage.getItem("AWS_SECRET_ACCESS_KEY") || "",
-  },
+    secretAccessKey: localStorage.getItem("AWS_SECRET_ACCESS_KEY") || ""
+  }
 });
 
-const BUCKET_NAME = "your-bucket-name"; // Update this with your bucket name
-const CAMERAS_JSON_KEY = "cameras.json"; // Update this with your JSON file name in the bucket
-
-export const fetchCamerasFromS3 = async (): Promise<Camera[]> => {
+export const fetchCamerasFromS3 = async () => {
   try {
-    const command = new GetObjectCommand({
-      Bucket: BUCKET_NAME,
-      Key: CAMERAS_JSON_KEY,
+    const command = new ListObjectsV2Command({
+      Bucket: "your-bucket-name", // Replace with your bucket name
+      Prefix: "public-camera-data/" // Adjust based on your folder structure
     });
 
     const response = await s3Client.send(command);
-    const str = await response.Body?.transformToString();
     
-    if (!str) {
-      throw new Error("No data received from S3");
+    if (!response.Contents) {
+      return [];
     }
 
-    return JSON.parse(str) as Camera[];
+    return response.Contents.map(object => {
+      const id = object.Key?.split('/').pop()?.replace('latest-frame.jpg', '') || '';
+      return {
+        id,
+        name: id.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
+        link: `https://your-bucket-name.s3.amazonaws.com/${object.Key}`
+      };
+    }).filter(camera => camera.id);
   } catch (error) {
-    console.error("Error fetching cameras from S3:", error);
-    throw error;
+    console.error('Error fetching cameras from S3:', error);
+    return [];
   }
 };
