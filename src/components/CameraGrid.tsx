@@ -4,7 +4,7 @@ import { CameraFeed } from "./CameraFeed";
 import { useToast } from "../hooks/use-toast";
 import { useState } from "react";
 import { Input } from "./ui/input";
-import { Search, SlidersHorizontal, Shield, Globe } from "lucide-react";
+import { Search, SlidersHorizontal, Globe } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -87,17 +87,12 @@ export const CameraGrid = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="text-center mb-12">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <Shield className="h-8 w-8 text-primary" />
+        <div className="flex items-center justify-center mb-4">
           <Globe className="h-8 w-8 text-primary" />
         </div>
         <h1 className="text-4xl font-bold mb-4 text-gradient">Wildfire Detection Network</h1>
-        <p className="text-xl text-muted-foreground mb-2">
-          Monitoring {cameras.length} locations in real-time with AI-powered precision
-        </p>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Our advanced camera network provides 24/7 surveillance and early fire detection, 
-          helping protect communities and natural resources across the region.
+        <p className="text-xl text-muted-foreground">
+          Monitoring {cameras.length} locations across California in real-time with AI-powered precision
         </p>
       </div>
       
