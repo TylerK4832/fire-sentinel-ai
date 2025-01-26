@@ -25,7 +25,7 @@ export const StatCards = ({ totalCameras, activeFires, averageProbability, total
         <div className="flex items-center gap-4">
           <AlertTriangle className="h-8 w-8 text-red-500" />
           <div>
-            <p className="text-sm text-muted-foreground">Active Fires</p>
+            <p className="text-sm text-muted-foreground">Potential Active Fires</p>
             <p className="text-2xl font-bold">{activeFires}</p>
           </div>
         </div>
