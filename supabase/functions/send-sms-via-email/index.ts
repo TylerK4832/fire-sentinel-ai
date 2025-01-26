@@ -28,14 +28,14 @@ serve(async (req) => {
   try {
     const SMTP_USERNAME = Deno.env.get('SMTP_USERNAME')
     const SMTP_PASSWORD = Deno.env.get('SMTP_PASSWORD')
-    const SMTP_HOST = Deno.env.get('SMTP_HOST') || 'smtp.gmail.com'
-    const SMTP_PORT = parseInt(Deno.env.get('SMTP_PORT') || '587')
+    const SMTP_HOST = 'smtp.gmail.com'
+    const SMTP_PORT = 587
     const FROM_EMAIL = Deno.env.get('FROM_EMAIL')
 
     // Log configuration (without sensitive data)
     console.log('SMTP Configuration:', {
-      hostExists: !!SMTP_HOST,
-      portExists: !!SMTP_PORT,
+      host: SMTP_HOST,
+      port: SMTP_PORT,
       usernameExists: !!SMTP_USERNAME,
       fromEmailExists: !!FROM_EMAIL
     });
@@ -57,47 +57,59 @@ serve(async (req) => {
     // Remove country code if present
     const phoneNumber = cleanNumber.length === 11 ? cleanNumber.substring(1) : cleanNumber;
     
-    // Try sending to multiple carriers (you might want to let users specify their carrier)
     const client = new SmtpClient();
     
-    await client.connectTLS({
-      hostname: SMTP_HOST,
-      port: SMTP_PORT,
-      username: SMTP_USERNAME,
-      password: SMTP_PASSWORD,
-    });
+    console.log('Connecting to SMTP server...');
+    
+    try {
+      await client.connectTLS({
+        hostname: SMTP_HOST,
+        port: SMTP_PORT,
+        username: SMTP_USERNAME,
+        password: SMTP_PASSWORD,
+      });
 
-    // Send to default gateway (Verizon)
-    const emailTo = `${phoneNumber}@${carrierGateways.default}`;
-    await client.send({
-      from: FROM_EMAIL,
-      to: emailTo,
-      subject: "FireWatch Alert",
-      content: message,
-    });
+      console.log('Connected to SMTP server successfully');
 
-    await client.close();
+      // Send to default gateway (Verizon)
+      const emailTo = `${phoneNumber}@${carrierGateways.default}`;
+      console.log('Sending email to:', emailTo);
 
-    console.log('SMS via email sent successfully to:', emailTo);
+      await client.send({
+        from: FROM_EMAIL,
+        to: emailTo,
+        subject: "",  // Empty subject for SMS
+        content: message,
+      });
 
-    return new Response(JSON.stringify({ 
-      success: true,
-      to: emailTo
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
-    })
+      console.log('Email sent successfully');
+      await client.close();
+
+      return new Response(JSON.stringify({ 
+        success: true,
+        to: emailTo
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200,
+      });
+    } catch (smtpError) {
+      console.error('SMTP Error:', smtpError);
+      await client.close().catch(console.error);
+      throw smtpError;
+    }
   } catch (error) {
-    console.error('Error sending SMS via email:', {
+    console.error('Error details:', {
+      name: error.name,
       message: error.message,
       stack: error.stack
     });
 
     return new Response(JSON.stringify({ 
-      error: error.message
+      error: error.message,
+      details: error.stack
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,
-    })
+    });
   }
 })
