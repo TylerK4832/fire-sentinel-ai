@@ -59,7 +59,7 @@ export const AlertsPage = () => {
   });
 
   const sendWelcomeMessage = async (phoneNumber: string) => {
-    const { error } = await supabase.functions.invoke('send-sms', {
+    const { error } = await supabase.functions.invoke('send-sms-via-email', {
       body: {
         to: phoneNumber,
         message: "Welcome to FireWatch! You'll now receive alerts when potential fires are detected by your selected cameras.",
