@@ -7,6 +7,8 @@ import { CurrentSubscriptions } from "./CurrentSubscriptions";
 import { DashboardHeader } from "../Dashboard/DashboardHeader";
 import { Loader2 } from "lucide-react";
 import { Database } from "@/integrations/supabase/types";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 type AlertSubscription = Database['public']['Tables']['alert_subscriptions']['Row'];
 
@@ -18,6 +20,24 @@ interface SubscriptionFormValues {
 export const AlertsPage = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Authentication Required",
+          description: "Please log in to manage alert subscriptions.",
+          variant: "destructive"
+        });
+        navigate("/auth");
+      }
+    };
+    
+    checkAuth();
+  }, [navigate, toast]);
 
   const { data: cameras = [], isLoading: camerasLoading } = useQuery({
     queryKey: ['cameras'],
