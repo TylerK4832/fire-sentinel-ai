@@ -50,13 +50,13 @@ export const SingleCamera = () => {
   // Format data for the charts
   const chartData = cameraDetails?.map((item: any) => ({
     time: new Date(item.timestamp * 1000).toLocaleTimeString(),
-    fireScore: Number((item.fire_score * 100).toFixed(2))
+    fireProbability: Number((item.fire_score * 100).toFixed(2))
   })) || [];
 
   // Calculate analytics data
   const hasFireDetection = cameraDetails?.some((item: any) => item.label === "fire");
-  const averageFireScore = chartData.length > 0 
-    ? (chartData.reduce((acc, curr) => acc + curr.fireScore, 0) / chartData.length).toFixed(2)
+  const averageFireProbability = chartData.length > 0 
+    ? (chartData.reduce((acc, curr) => acc + curr.fireProbability, 0) / chartData.length).toFixed(2)
     : 0;
 
   return (
@@ -68,8 +68,8 @@ export const SingleCamera = () => {
         </Link>
       </div>
       
-      <div className="grid grid-cols-1 xl:grid-cols-[60%_38%] gap-6">
-        <div className="glass-morphism rounded-lg p-4">
+      <div className="grid grid-cols-1 xl:grid-cols-[65%_33%] gap-6">
+        <div className="h-[calc(100vh-12rem)]">
           <CameraFeed camera={camera} large />
         </div>
         
@@ -79,14 +79,14 @@ export const SingleCamera = () => {
             variant={hasFireDetection ? "destructive" : "default"} 
             className={`glass-morphism ${!hasFireDetection ? 'border-green-500/30 bg-green-500/5' : 'border-red-500/30 bg-red-500/5'}`}
           >
-            <div className="flex items-start gap-4">
+            <div className="flex items-start gap-6">
               {hasFireDetection ? (
-                <AlertTriangle className="h-8 w-8 text-red-500 shrink-0" />
+                <AlertTriangle className="h-10 w-10 text-red-500 shrink-0" />
               ) : (
-                <CheckCircle2 className="h-8 w-8 text-green-500 shrink-0" />
+                <CheckCircle2 className="h-10 w-10 text-green-500 shrink-0" />
               )}
               <div>
-                <AlertTitle className="font-bold text-xl mb-2">
+                <AlertTitle className="font-bold text-xl mb-3">
                   {hasFireDetection ? (
                     <span className="text-red-500">Fire Detected!</span>
                   ) : (
@@ -109,16 +109,16 @@ export const SingleCamera = () => {
           {/* Analytics Cards */}
           <div className="grid grid-cols-2 gap-4 mb-4">
             <Card className="glass-morphism p-4">
-              <div className="flex items-center gap-3">
-                <Flame className={`h-8 w-8 ${hasFireDetection ? 'text-red-500' : 'text-green-500'}`} />
+              <div className="flex items-center gap-4">
+                <Flame className="h-8 w-8 text-red-500" />
                 <div>
-                  <p className="text-sm text-muted-foreground">Average Fire Score</p>
-                  <p className="text-2xl font-bold">{averageFireScore}%</p>
+                  <p className="text-sm text-muted-foreground">Average Fire Probability</p>
+                  <p className="text-2xl font-bold">{averageFireProbability}%</p>
                 </div>
               </div>
             </Card>
             <Card className="glass-morphism p-4">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-4">
                 <Timer className="h-8 w-8 text-blue-500" />
                 <div>
                   <p className="text-sm text-muted-foreground">Total Readings</p>
@@ -131,7 +131,7 @@ export const SingleCamera = () => {
           {/* Chart Card */}
           <Card className="glass-morphism">
             <CardContent className="pt-6">
-              <h2 className="text-lg font-semibold mb-4 text-gradient">Fire Detection Score Timeline</h2>
+              <h2 className="text-lg font-semibold mb-4 text-gradient">Fire Detection Probability Timeline</h2>
               {isLoadingDetails ? (
                 <div className="flex items-center justify-center h-32">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
@@ -156,7 +156,7 @@ export const SingleCamera = () => {
                         className="text-xs"
                         tick={{ fill: 'currentColor' }}
                         label={{ 
-                          value: 'Fire Score (%)', 
+                          value: 'Fire Probability (%)', 
                           angle: -90, 
                           position: 'insideLeft',
                           fill: 'currentColor',
@@ -174,7 +174,7 @@ export const SingleCamera = () => {
                       />
                       <Line 
                         type="monotone" 
-                        dataKey="fireScore" 
+                        dataKey="fireProbability" 
                         stroke={hasFireDetection ? "#ef4444" : "#22c55e"}
                         strokeWidth={2}
                         dot={false}
