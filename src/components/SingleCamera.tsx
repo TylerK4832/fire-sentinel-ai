@@ -57,7 +57,7 @@ export const SingleCamera = () => {
   const hasFireDetection = cameraDetails?.some((item: any) => item.label === "fire");
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 max-w-[2000px] 2xl:px-0">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gradient">{camera.name}</h1>
         <Link to="/">
@@ -65,14 +65,17 @@ export const SingleCamera = () => {
         </Link>
       </div>
       
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <div className="glass-morphism rounded-lg p-4">
           <CameraFeed camera={camera} large />
         </div>
         
         <div className="space-y-6">
           {/* Fire Status Alert */}
-          <Alert variant={hasFireDetection ? "destructive" : "default"} className="glass-morphism">
+          <Alert 
+            variant={hasFireDetection ? "destructive" : "default"} 
+            className={`glass-morphism ${!hasFireDetection && 'border-green-500/30 bg-green-500/5'}`}
+          >
             {hasFireDetection ? (
               <>
                 <AlertTriangle className="h-5 w-5" />
@@ -83,9 +86,9 @@ export const SingleCamera = () => {
               </>
             ) : (
               <>
-                <CheckCircle2 className="h-5 w-5" />
-                <AlertTitle className="font-bold">No Fire Detected</AlertTitle>
-                <AlertDescription>
+                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                <AlertTitle className="font-bold text-green-500">All Clear - No Fire Detected</AlertTitle>
+                <AlertDescription className="text-green-500/90">
                   Current readings indicate normal conditions with no fire detection.
                 </AlertDescription>
               </>
@@ -101,7 +104,7 @@ export const SingleCamera = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
                 </div>
               ) : cameraDetails && cameraDetails.length > 0 ? (
-                <div className="h-[300px]">
+                <div className="h-[400px]">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart 
                       data={chartData}

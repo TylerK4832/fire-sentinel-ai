@@ -33,14 +33,14 @@ export const CameraFeed = ({ camera, large = false }: CameraFeedProps) => {
       <img
         src={imageUrl}
         alt={camera.name}
-        className={`w-full h-full object-cover ${!large && 'transition-transform hover:scale-105'}`}
+        className={`w-full h-full object-contain ${!large && 'transition-transform hover:scale-105'}`}
         onLoad={() => setIsLoading(false)}
       />
     </>
   );
 
   return (
-    <div className={`relative overflow-hidden rounded-lg ${large ? 'w-full h-[80vh]' : 'aspect-video'}`}>
+    <div className={`relative overflow-hidden rounded-lg ${large ? 'w-full h-[calc(100vh-12rem)]' : 'aspect-video'}`}>
       {!large ? (
         <Link to={`/camera/${camera.id}`} className="block w-full h-full">
           {content}
