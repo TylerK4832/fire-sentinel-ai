@@ -41,7 +41,11 @@ export const AlertsPage = () => {
     mutationFn: async ({ cameraId, phoneNumber }: { cameraId: string, phoneNumber: string }) => {
       const { error } = await supabase
         .from('alert_subscriptions')
-        .insert([{ camera_id: cameraId, phone_number: phoneNumber }]);
+        .insert([{ 
+          camera_id: cameraId, 
+          phone_number: phoneNumber,
+          user_id: (await supabase.auth.getUser()).data.user?.id
+        }]);
       
       if (error) throw error;
     },
