@@ -59,11 +59,6 @@ export const getCameraData = async (camName: string) => {
       TableName: "fire-or-no-fire",
       IndexName: "cam_name-timestamp-index",
       KeyConditionExpression: "cam_name = :camName",
-      ExpressionAttributeValues: {
-        ":camName": camName,
-      },
-      ScanIndexForward: true,
-      // Limit results to last 24 hours to reduce data transfer
       FilterExpression: "#ts >= :dayAgo",
       ExpressionAttributeNames: {
         "#ts": "timestamp"
@@ -71,7 +66,8 @@ export const getCameraData = async (camName: string) => {
       ExpressionAttributeValues: {
         ":camName": camName,
         ":dayAgo": Math.floor(Date.now()/1000) - (24 * 60 * 60)
-      }
+      },
+      ScanIndexForward: true
     });
 
     const response = await docClient.send(command);

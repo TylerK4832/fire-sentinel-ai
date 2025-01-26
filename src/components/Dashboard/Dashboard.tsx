@@ -17,7 +17,7 @@ export const Dashboard = () => {
     queryKey: ['cameras'],
     queryFn: getCameras,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    cacheTime: 10 * 60 * 1000, // 10 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // Cache camera data for 1 minute and enable parallel queries
@@ -31,7 +31,7 @@ export const Dashboard = () => {
     },
     enabled: cameras.length > 0,
     staleTime: 60 * 1000, // 1 minute
-    cacheTime: 2 * 60 * 1000, // 2 minutes
+    gcTime: 2 * 60 * 1000, // 2 minutes
     meta: {
       onError: () => {
         toast({
