@@ -61,10 +61,12 @@ export const FireAlerts = ({ alerts }: FireAlertsProps) => {
 
   return (
     <Card className="glass-morphism h-full">
-      <CardContent className="p-6 h-full">
+      <CardContent className="p-4 md:p-6 h-full">
         <h2 className="text-lg font-semibold mb-4 text-gradient">Potential Active Fire Alerts</h2>
         {isMobile ? (
-          <AlertsList />
+          <div className="overflow-y-auto">
+            <AlertsList />
+          </div>
         ) : (
           <ScrollArea className="h-[400px] pr-4">
             <AlertsList />
