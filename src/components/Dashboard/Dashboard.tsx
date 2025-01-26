@@ -40,18 +40,7 @@ export const Dashboard = () => {
     return <LoadingSpinner />;
   }
 
-  // Calculate statistics
-  const activeFires = cameras.filter(camera => 
-    allCameraData.some(data => 
-      data.cam_name === camera.id && data.label === "fire"
-    )
-  ).length;
-
-  const averageProbability = allCameraData.length > 0
-    ? (allCameraData.reduce((acc, curr) => acc + (curr.fire_score * 100), 0) / allCameraData.length).toFixed(2)
-    : 0;
-
-  // Get fire alerts
+  // Get fire alerts with probability > 50%
   const fireAlerts = cameras
     .map(camera => {
       const cameraData = allCameraData.filter(data => data.cam_name === camera.id);
@@ -67,6 +56,13 @@ export const Dashboard = () => {
       } : null;
     })
     .filter(Boolean);
+
+  // Calculate statistics based on fire alerts
+  const activeFires = fireAlerts.length;
+
+  const averageProbability = allCameraData.length > 0
+    ? (allCameraData.reduce((acc, curr) => acc + (curr.fire_score * 100), 0) / allCameraData.length).toFixed(2)
+    : 0;
 
   // Prepare chart data
   const chartData = allCameraData
@@ -89,7 +85,7 @@ export const Dashboard = () => {
     .sort((a, b) => a.time.localeCompare(b.time));
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="h-[calc(100vh-5rem)] container mx-auto px-4 py-8 overflow-hidden">
       <DashboardHeader 
         title="Wildfire Monitoring Dashboard"
         description="Real-time fire detection analytics across all cameras"
@@ -102,11 +98,11 @@ export const Dashboard = () => {
         totalReadings={allCameraData.length}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="lg:h-[500px]">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-24rem)] overflow-hidden">
+        <div className="h-full">
           <FireAlerts alerts={fireAlerts} />
         </div>
-        <div className="lg:h-[500px]">
+        <div className="h-full">
           <TrendChart data={chartData} />
         </div>
       </div>

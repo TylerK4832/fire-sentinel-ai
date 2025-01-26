@@ -16,9 +16,9 @@ interface FireAlertsProps {
 export const FireAlerts = ({ alerts }: FireAlertsProps) => {
   if (alerts.length === 0) {
     return (
-      <Card className="glass-morphism">
-        <CardContent className="p-6">
-          <div className="flex flex-col items-center justify-center text-center py-6">
+      <Card className="glass-morphism h-full">
+        <CardContent className="p-6 h-full">
+          <div className="flex flex-col items-center justify-center text-center h-full">
             <div className="rounded-full bg-green-500/10 p-3 mb-4">
               <Flame className="h-6 w-6 text-green-500" />
             </div>
@@ -31,11 +31,11 @@ export const FireAlerts = ({ alerts }: FireAlertsProps) => {
   }
 
   return (
-    <Card className="glass-morphism">
-      <CardContent className="p-6">
+    <Card className="glass-morphism h-full">
+      <CardContent className="p-6 h-full">
         <h2 className="text-lg font-semibold mb-4 text-gradient">Potential Active Fire Alerts</h2>
-        <ScrollArea className="h-[400px] pr-4">
-          <div className="space-y-4">
+        <ScrollArea className="h-[calc(100%-3rem)]">
+          <div className="space-y-4 pr-4">
             {alerts.map((alert) => (
               <Link
                 key={alert.cameraId}
