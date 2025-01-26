@@ -6,6 +6,9 @@ import { AlertSubscriptionForm } from "./AlertSubscriptionForm";
 import { CurrentSubscriptions } from "./CurrentSubscriptions";
 import { DashboardHeader } from "../Dashboard/DashboardHeader";
 import { Loader2 } from "lucide-react";
+import { Database } from "@/integrations/supabase/types";
+
+type AlertSubscription = Database['public']['Tables']['alert_subscriptions']['Row'];
 
 export const AlertsPage = () => {
   const { toast } = useToast();
@@ -24,7 +27,7 @@ export const AlertsPage = () => {
         .select('*');
       
       if (error) throw error;
-      return data;
+      return data as AlertSubscription[];
     },
     meta: {
       onError: () => {
@@ -39,12 +42,15 @@ export const AlertsPage = () => {
 
   const createSubscription = useMutation({
     mutationFn: async ({ cameraId, phoneNumber }: { cameraId: string, phoneNumber: string }) => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
       const { error } = await supabase
         .from('alert_subscriptions')
         .insert([{ 
           camera_id: cameraId, 
           phone_number: phoneNumber,
-          user_id: (await supabase.auth.getUser()).data.user?.id
+          user_id: user.id
         }]);
       
       if (error) throw error;
