@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CameraGrid } from "./components/CameraGrid";
 import { SingleCamera } from "./components/SingleCamera";
+import { Header } from "./components/Header";
 
 const queryClient = new QueryClient();
 
@@ -14,11 +15,14 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <div className="min-h-screen bg-gray-900 text-white">
-          <Routes>
-            <Route path="/" element={<CameraGrid />} />
-            <Route path="/camera/:id" element={<SingleCamera />} />
-          </Routes>
+        <div className="min-h-screen bg-[#222222]">
+          <Header />
+          <main className="pt-20">
+            <Routes>
+              <Route path="/" element={<CameraGrid />} />
+              <Route path="/camera/:id" element={<SingleCamera />} />
+            </Routes>
+          </main>
         </div>
       </BrowserRouter>
     </TooltipProvider>

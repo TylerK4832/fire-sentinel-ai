@@ -33,7 +33,7 @@ export default {
           foreground: "hsl(var(--secondary-foreground))",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
+          DEFAULT: "hsl(24 95% 53%)", // Orange for fire alerts
           foreground: "hsl(var(--destructive-foreground))",
         },
         muted: {
