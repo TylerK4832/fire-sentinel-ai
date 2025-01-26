@@ -82,8 +82,8 @@ export const CameraGrid = () => {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-6">Camera Dashboard</h1>
       
-      {/* Search Bar */}
-      <div className="relative mb-6">
+      {/* Search Bar with max-width */}
+      <div className="relative mb-6 max-w-md mx-auto">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
         <Input
           type="text"
@@ -93,7 +93,7 @@ export const CameraGrid = () => {
             setSearchQuery(e.target.value);
             setCurrentPage(1); // Reset to first page when searching
           }}
-          className="pl-10"
+          className="pl-10 text-foreground"
         />
       </div>
 
