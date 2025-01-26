@@ -1,4 +1,4 @@
-import { serve } from "https://deno.fresh.run/std@0.168.0/http/server.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { DynamoDBClient } from "npm:@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand } from "npm:@aws-sdk/lib-dynamodb";
 
