@@ -38,6 +38,9 @@ serve(async (req) => {
       )
     }
 
+    // Add more detailed logging
+    console.log(`Successfully retrieved secret: ${name}`)
+    
     return new Response(
       JSON.stringify({ value }),
       { 
