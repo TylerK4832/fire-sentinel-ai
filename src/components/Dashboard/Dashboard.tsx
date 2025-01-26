@@ -103,8 +103,12 @@ export const Dashboard = () => {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <FireAlerts alerts={fireAlerts} />
-        <TrendChart data={chartData} />
+        <div className="lg:h-[500px]">
+          <FireAlerts alerts={fireAlerts} />
+        </div>
+        <div className="lg:h-[500px]">
+          <TrendChart data={chartData} />
+        </div>
       </div>
     </div>
   );
