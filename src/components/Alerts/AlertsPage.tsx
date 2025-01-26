@@ -10,6 +10,11 @@ import { Database } from "@/integrations/supabase/types";
 
 type AlertSubscription = Database['public']['Tables']['alert_subscriptions']['Row'];
 
+interface SubscriptionFormValues {
+  cameraId: string;
+  phoneNumber: string;
+}
+
 export const AlertsPage = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -41,7 +46,7 @@ export const AlertsPage = () => {
   });
 
   const createSubscription = useMutation({
-    mutationFn: async ({ cameraId, phoneNumber }: { cameraId: string, phoneNumber: string }) => {
+    mutationFn: async ({ cameraId, phoneNumber }: SubscriptionFormValues) => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("User not authenticated");
 
@@ -114,7 +119,7 @@ export const AlertsPage = () => {
       <div className="grid gap-6 md:grid-cols-2">
         <AlertSubscriptionForm
           cameras={cameras}
-          onSubmit={(values) => createSubscription.mutate(values)}
+          onSubmit={(values: SubscriptionFormValues) => createSubscription.mutate(values)}
           isLoading={createSubscription.isPending}
         />
         <CurrentSubscriptions
