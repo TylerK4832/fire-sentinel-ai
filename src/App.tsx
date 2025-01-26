@@ -6,7 +6,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CameraGrid } from "./components/CameraGrid";
 import { SingleCamera } from "./components/SingleCamera";
 import { Dashboard } from "./components/Dashboard/Dashboard";
-import { AlertsPage } from "./components/Alerts/AlertsPage";
 import { Header } from "./components/Header";
 
 const queryClient = new QueryClient();
@@ -23,7 +22,6 @@ const App = () => (
             <Routes>
               <Route path="/" element={<CameraGrid />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/alerts" element={<AlertsPage />} />
               <Route path="/camera/:id" element={<SingleCamera />} />
             </Routes>
           </main>
