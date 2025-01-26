@@ -6,6 +6,14 @@ import { CameraFeed } from "./CameraFeed";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { useToast } from "../hooks/use-toast";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
 
 export const SingleCamera = () => {
   const { id } = useParams();
@@ -65,19 +73,27 @@ export const SingleCamera = () => {
                 <div className="flex items-center justify-center h-32">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
                 </div>
-              ) : cameraDetails ? (
-                <div className="space-y-4">
-                  {Object.entries(cameraDetails).map(([key, value]) => (
-                    <div key={key} className="flex flex-col">
-                      <span className="text-sm font-medium text-muted-foreground capitalize">
-                        {key.replace(/_/g, ' ')}
-                      </span>
-                      <span className="text-foreground">
-                        {String(value)}
-                      </span>
-                    </div>
-                  ))}
-                </div>
+              ) : cameraDetails && cameraDetails.length > 0 ? (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Index</TableHead>
+                      <TableHead>Value</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {cameraDetails.map((item: any, index: number) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{index}</TableCell>
+                        <TableCell>
+                          <pre className="whitespace-pre-wrap text-sm">
+                            {JSON.stringify(item, null, 2)}
+                          </pre>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               ) : (
                 <p className="text-muted-foreground">No additional details available</p>
               )}
