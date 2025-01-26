@@ -40,7 +40,7 @@ export const FireAlerts = ({ alerts }: FireAlertsProps) => {
               to={`/camera/${alert.cameraId}`}
               className="block transition-transform hover:scale-[1.02] hover:shadow-lg"
             >
-              <div className="flex items-center justify-between p-4 rounded-lg bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition-colors">
+              <div className="flex items-center justify-between p-4 rounded-lg bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition-colors cursor-pointer">
                 <div className="flex items-center gap-3">
                   <Flame className="h-5 w-5 text-red-500" />
                   <div>
