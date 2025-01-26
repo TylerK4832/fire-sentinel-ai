@@ -1,5 +1,9 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { 
+  DynamoDBDocumentClient, 
+  QueryCommand,
+  GetCommand
+} from "@aws-sdk/lib-dynamodb";
 
 const createDynamoDBClient = () => {
   const client = new DynamoDBClient({
@@ -17,13 +21,40 @@ const createDynamoDBClient = () => {
   });
 };
 
+export const getCameraData = async (id: string) => {
+  const docClient = createDynamoDBClient();
+
+  try {
+    const command = new QueryCommand({
+      TableName: "fire-or-no-fire",
+      KeyConditionExpression: "cam_id = :camId",
+      ExpressionAttributeValues: {
+        ":camId": id,
+      },
+      Limit: 1, // Get most recent record
+      ScanIndexForward: false, // Sort in descending order (newest first)
+    });
+
+    const response = await docClient.send(command);
+    return response.Items?.[0] || null;
+  } catch (error) {
+    console.error("Error fetching camera data:", error);
+    throw error;
+  } finally {
+    if (docClient) {
+      // @ts-ignore - TypeScript doesn't know about the destroy method
+      docClient.destroy?.();
+    }
+  }
+};
+
 export const getCameraDataByName = async (camName: string) => {
   const docClient = createDynamoDBClient();
 
   try {
     const command = new QueryCommand({
       TableName: "fire-or-no-fire",
-      IndexName: "cam_name-index", // Replace with your GSI name
+      IndexName: "cam_name-index",
       KeyConditionExpression: "cam_name = :camName",
       ExpressionAttributeValues: {
         ":camName": camName,
@@ -31,7 +62,7 @@ export const getCameraDataByName = async (camName: string) => {
     });
 
     const response = await docClient.send(command);
-    return response.Items; // Query returns an array of matching items
+    return response.Items; 
   } catch (error) {
     console.error("Error fetching camera data by name:", error);
     throw error;
