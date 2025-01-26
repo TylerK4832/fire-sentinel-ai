@@ -40,7 +40,7 @@ export const CameraFeed = ({ camera, large = false }: CameraFeedProps) => {
   );
 
   return (
-    <div className={`relative overflow-hidden rounded-lg ${large ? 'w-full h-[calc(100vh-12rem)]' : 'aspect-video'}`}>
+    <div className={`relative overflow-hidden rounded-lg ${large ? 'w-full aspect-video md:aspect-[16/9]' : 'aspect-video'}`}>
       {!large ? (
         <Link to={`/camera/${camera.id}`} className="block w-full h-full">
           {content}

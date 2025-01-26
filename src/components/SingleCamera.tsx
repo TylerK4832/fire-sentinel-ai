@@ -68,7 +68,7 @@ export const SingleCamera = () => {
       <h1 className="text-2xl font-bold text-gradient mb-6">{camera.name}</h1>
       
       <div className="grid grid-cols-1 xl:grid-cols-[65%_33%] gap-6">
-        <div className="max-h-[50vh] md:max-h-[60vh] xl:h-[calc(100vh-12rem)]">
+        <div className="w-full h-auto">
           <CameraFeed camera={camera} large />
         </div>
         
