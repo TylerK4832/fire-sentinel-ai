@@ -3,9 +3,9 @@ import { Camera } from '../types/camera';
 
 // Define the type for our raw JSON data
 interface RawCamera {
+  name: string;
   id: string;
-  title: string;
-  url: string;
+  link: string;
 }
 
 // Type assertion to tell TypeScript about the structure of our JSON data
@@ -14,7 +14,7 @@ const typedCamerasData = camerasData as RawCamera[];
 export const getCameras = (): Camera[] => {
   return typedCamerasData.map(camera => ({
     id: camera.id,
-    name: camera.title,
-    link: camera.url
+    name: camera.name,
+    link: camera.link
   }));
 };
