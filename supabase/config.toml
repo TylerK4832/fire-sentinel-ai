@@ -1,4 +1,4 @@
 project_id = "yszhslsluycamhnfwzgz"
 
-[functions.get-secret]
+[functions.get-camera-data]
 verify_jwt = false
