@@ -85,7 +85,7 @@ export const Dashboard = () => {
     .sort((a, b) => a.time.localeCompare(b.time));
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 min-h-screen">
       <DashboardHeader 
         title="Wildfire Monitoring Dashboard"
         description="Real-time fire detection analytics across all cameras"
@@ -99,10 +99,10 @@ export const Dashboard = () => {
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-        <div className="lg:h-[500px]">
+        <div className="h-[500px] lg:h-auto">
           <FireAlerts alerts={fireAlerts} />
         </div>
-        <div className="lg:h-[500px]">
+        <div className="h-[500px] lg:h-auto">
           <TrendChart data={chartData} />
         </div>
       </div>
