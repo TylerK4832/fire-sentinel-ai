@@ -77,10 +77,10 @@ export const CurrentSubscriptions = ({
                   </Button>
                 </TableCell>
               </TableRow>
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-    );
-  }
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
 };
