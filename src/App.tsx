@@ -7,6 +7,8 @@ import { CameraGrid } from "./components/CameraGrid";
 import { SingleCamera } from "./components/SingleCamera";
 import { Dashboard } from "./components/Dashboard/Dashboard";
 import { Header } from "./components/Header";
+import { AlertsPage } from "./components/Alerts/AlertsPage";
+import { AuthPage } from "./components/Auth/AuthPage";
 
 const queryClient = new QueryClient();
 
@@ -23,6 +25,8 @@ const App = () => (
               <Route path="/" element={<CameraGrid />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/camera/:id" element={<SingleCamera />} />
+              <Route path="/alerts" element={<AlertsPage />} />
+              <Route path="/auth" element={<AuthPage />} />
             </Routes>
           </main>
         </div>

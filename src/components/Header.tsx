@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Flame, LayoutDashboard, Grid, Menu, X } from "lucide-react";
+import { Flame, LayoutDashboard, Grid, Menu, X, BellRing } from "lucide-react";
 import { useState } from "react";
 import { useIsMobile } from "../hooks/use-mobile";
 
@@ -18,6 +18,11 @@ export const Header = () => {
       to: "/dashboard",
       icon: LayoutDashboard,
       label: "Dashboard",
+    },
+    {
+      to: "/alerts",
+      icon: BellRing,
+      label: "Alerts",
     },
   ];
 
