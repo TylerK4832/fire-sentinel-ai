@@ -56,6 +56,7 @@ export const AlertsPage = () => {
         phone_number: phoneNumber
       });
 
+      // First, create the subscription
       const { data, error } = await supabase
         .from('alert_subscriptions')
         .insert([{
@@ -66,6 +67,25 @@ export const AlertsPage = () => {
       if (error) {
         console.error("Error creating subscription:", error);
         throw error;
+      }
+
+      // Get camera name for the welcome message
+      const camera = cameras.find(c => c.id === cameraId);
+      const cameraName = camera?.name || 'Unknown Camera';
+
+      // Send welcome message using Edge Function
+      const { error: sendError } = await supabase.functions.invoke('send-alert', {
+        body: {
+          cameraId,
+          phoneNumber,
+          isWelcomeMessage: true,
+          cameraName
+        }
+      });
+
+      if (sendError) {
+        console.error("Error sending welcome message:", sendError);
+        throw sendError;
       }
 
       return data;

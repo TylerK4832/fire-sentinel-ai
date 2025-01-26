@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.38.0'
+import { Twilio } from 'npm:twilio'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -12,59 +13,32 @@ serve(async (req) => {
   }
 
   try {
-    const { cameraId, probability } = await req.json()
-
-    // Initialize Supabase client
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
-
-    // Get all subscriptions for this camera
-    const { data: subscriptions, error: subscriptionError } = await supabaseClient
-      .from('alert_subscriptions')
-      .select('*')
-      .eq('camera_id', cameraId)
-
-    if (subscriptionError) throw subscriptionError
-
-    // If no subscriptions, return early
-    if (!subscriptions || subscriptions.length === 0) {
-      return new Response(
-        JSON.stringify({ message: 'No subscriptions found' }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      )
-    }
-
-    // Get camera details
-    const { data: cameras } = await supabaseClient
-      .from('cameras')
-      .select('name')
-      .eq('id', cameraId)
-      .single()
-
-    const cameraName = cameras?.name || 'Unknown Camera'
+    const { cameraId, probability, phoneNumber, isWelcomeMessage, cameraName } = await req.json()
 
     // Initialize Twilio client
     const accountSid = Deno.env.get('TWILIO_ACCOUNT_SID')
     const authToken = Deno.env.get('TWILIO_AUTH_TOKEN')
-    const twilioNumber = Deno.env.get('TWILIO_PHONE_NUMBER')
+    const twilioNumber = "(866) 885-9350"
 
-    const client = twilio(accountSid, authToken)
+    const client = new Twilio(accountSid, authToken)
 
-    // Send SMS to all subscribers
-    const messagePromises = subscriptions.map(subscription =>
-      client.messages.create({
-        body: `🚨 Fire Alert: ${cameraName} has detected a potential fire with ${probability}% probability.`,
-        from: twilioNumber,
-        to: subscription.phone_number
-      })
-    )
+    let messageBody
 
-    await Promise.all(messagePromises)
+    if (isWelcomeMessage) {
+      messageBody = `👋 Welcome! You've successfully subscribed to fire alerts for ${cameraName}. You'll receive SMS notifications when potential fires are detected. Reply STOP to unsubscribe.`
+    } else {
+      messageBody = `🚨 Fire Alert: ${cameraName} has detected a potential fire with ${probability}% probability.`
+    }
+
+    // Send SMS
+    await client.messages.create({
+      body: messageBody,
+      from: twilioNumber,
+      to: phoneNumber
+    })
 
     return new Response(
-      JSON.stringify({ message: 'Alerts sent successfully' }),
+      JSON.stringify({ message: 'Message sent successfully' }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     )
   } catch (error) {
