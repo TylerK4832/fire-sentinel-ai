@@ -48,23 +48,20 @@ serve(async (req) => {
 
     // Remove country code if present
     const phoneNumber = cleanNumber.length === 11 ? cleanNumber.substring(1) : cleanNumber;
-    
+
     const client = new SmtpClient();
     
-    console.log('Initializing SMTP client...');
-
     const emailTo = `${phoneNumber}@${carrierGateways.default}`;
     console.log('Target email address:', emailTo);
 
     try {
       console.log('Attempting SMTP connection...');
-      
-      await client.connect({
+
+      await client.connectTLS({
         hostname: "smtp.gmail.com",
-        port: 587,
+        port: 465, // Using secure port 465 instead of 587
         username: SMTP_USERNAME,
         password: SMTP_PASSWORD,
-        tls: true,
       });
 
       console.log('SMTP connection established');
