@@ -1,5 +1,4 @@
 import { supabase } from "../integrations/supabase/client";
-import { useToast } from "../hooks/use-toast";
 
 export const getCameraData = async (cameraId: string) => {
   console.log('Fetching data for camera:', cameraId);
@@ -14,8 +13,13 @@ export const getCameraData = async (cameraId: string) => {
       throw error;
     }
 
+    if (!data) {
+      console.log('No data returned from function');
+      return [];
+    }
+
     console.log('Camera data response:', data);
-    return data || [];
+    return data;
   } catch (error) {
     console.error("Error fetching camera data:", error);
     throw error;

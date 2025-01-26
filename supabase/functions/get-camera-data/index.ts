@@ -17,13 +17,7 @@ serve(async (req) => {
   try {
     // Validate request method
     if (req.method !== 'POST') {
-      return new Response(
-        JSON.stringify({ error: 'Method not allowed' }),
-        { 
-          status: 405, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
+      throw new Error('Method not allowed');
     }
 
     // Parse request body
@@ -31,13 +25,7 @@ serve(async (req) => {
     console.log('Received request for camera:', cameraId);
 
     if (!cameraId) {
-      return new Response(
-        JSON.stringify({ error: 'Camera ID is required' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
+      throw new Error('Camera ID is required');
     }
 
     // Get AWS credentials from environment
@@ -46,13 +34,7 @@ serve(async (req) => {
 
     if (!accessKeyId || !secretAccessKey) {
       console.error('AWS credentials not found');
-      return new Response(
-        JSON.stringify({ error: 'AWS credentials not configured' }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-        }
-      );
+      throw new Error('AWS credentials not configured');
     }
 
     // Initialize DynamoDB client
@@ -87,21 +69,27 @@ serve(async (req) => {
     return new Response(
       JSON.stringify(response.Items || []),
       { 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 200
+        headers: { 
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        }
       }
     );
 
   } catch (error) {
     console.error('Error in get-camera-data function:', error);
+    
     return new Response(
       JSON.stringify({ 
-        error: 'Failed to fetch camera data',
-        details: error.message 
+        error: error.message || 'Failed to fetch camera data',
+        details: error.stack 
       }),
       { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        status: 500,
+        headers: { 
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        }
       }
     );
   }
