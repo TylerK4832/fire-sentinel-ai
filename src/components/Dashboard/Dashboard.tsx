@@ -40,10 +40,19 @@ export const Dashboard = () => {
     return <LoadingSpinner />;
   }
 
-  // Get fire alerts and calculate active fires
+  // Filter data for last 24 hours
+  const now = Date.now();
+  const twentyFourHoursAgo = now - (24 * 60 * 60 * 1000);
+  
+  const filteredData = allCameraData.filter(data => {
+    const timestamp = data.timestamp * 1000;
+    return timestamp >= twentyFourHoursAgo && timestamp <= now;
+  });
+
+  // Get fire alerts and calculate active fires from filtered data
   const fireAlerts = cameras
     .map(camera => {
-      const cameraData = allCameraData.filter(data => data.cam_name === camera.id);
+      const cameraData = filteredData.filter(data => data.cam_name === camera.id);
       if (cameraData.length === 0) return null;
       
       const latestReading = cameraData[cameraData.length - 1];
@@ -59,17 +68,18 @@ export const Dashboard = () => {
 
   const activeFires = fireAlerts.length;
 
-  // Calculate average probability across all cameras
-  const averageProbability = allCameraData.length > 0
-    ? Number((allCameraData.reduce((acc, curr) => acc + (curr.fire_score * 100), 0) / allCameraData.length).toFixed(2))
+  // Calculate average probability across all cameras from filtered data
+  const averageProbability = filteredData.length > 0
+    ? Number((filteredData.reduce((acc, curr) => acc + (curr.fire_score * 100), 0) / filteredData.length).toFixed(2))
     : 0;
 
-  // Prepare chart data
-  const chartData = allCameraData
+  // Prepare chart data from filtered data
+  const chartData = filteredData
     .reduce((acc: any[], curr) => {
       const timestamp = new Date(curr.timestamp * 1000);
       const hour = timestamp.getHours().toString().padStart(2, '0');
-      const timeKey = `${hour}:00`;
+      const minute = timestamp.getMinutes().toString().padStart(2, '0');
+      const timeKey = `${hour}:${minute}`;
       
       const existing = acc.find(item => item.time === timeKey);
       if (existing) {
@@ -95,7 +105,7 @@ export const Dashboard = () => {
         totalCameras={cameras.length}
         activeFires={activeFires}
         averageProbability={averageProbability}
-        totalReadings={allCameraData.length}
+        totalReadings={filteredData.length}
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">

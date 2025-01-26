@@ -11,7 +11,7 @@ interface TrendChartProps {
 export const TrendChart = ({ data }: TrendChartProps) => (
   <Card className="glass-morphism">
     <CardContent className="pt-6">
-      <h2 className="text-lg font-semibold mb-4 text-gradient">Average Fire Probability Trend</h2>
+      <h2 className="text-lg font-semibold mb-4 text-gradient">Last 24 Hours Average Fire Probability</h2>
       <div className="h-[300px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart 
@@ -23,6 +23,9 @@ export const TrendChart = ({ data }: TrendChartProps) => (
               dataKey="time" 
               className="text-xs"
               tick={{ fill: 'currentColor' }}
+              angle={-45}
+              textAnchor="end"
+              height={60}
             />
             <YAxis 
               className="text-xs"

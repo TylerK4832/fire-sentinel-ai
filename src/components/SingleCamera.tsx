@@ -43,14 +43,22 @@ export const SingleCamera = () => {
     );
   }
 
-  // Format data for the charts
-  const chartData = cameraDetails?.map((item: any) => ({
+  // Filter data for last 24 hours and format for charts
+  const now = Date.now();
+  const twentyFourHoursAgo = now - (24 * 60 * 60 * 1000);
+  
+  const filteredData = cameraDetails?.filter((item: any) => {
+    const timestamp = item.timestamp * 1000;
+    return timestamp >= twentyFourHoursAgo && timestamp <= now;
+  }) || [];
+
+  const chartData = filteredData.map((item: any) => ({
     time: new Date(item.timestamp * 1000).toLocaleTimeString(),
     fireProbability: Number((item.fire_score * 100).toFixed(2))
-  })) || [];
+  }));
 
-  // Calculate analytics data
-  const hasFireDetection = cameraDetails?.some((item: any) => item.label === "fire");
+  // Calculate analytics data from filtered data
+  const hasFireDetection = filteredData.some((item: any) => item.label === "fire");
   const averageFireProbability = chartData.length > 0 
     ? (chartData.reduce((acc, curr) => acc + curr.fireProbability, 0) / chartData.length).toFixed(2)
     : 0;
@@ -95,11 +103,11 @@ export const SingleCamera = () => {
                   <AlertDescription className="text-lg">
                     {hasFireDetection ? (
                       <span className="text-white">
-                        This camera has detected potential fire activity. Please check the feed and contact emergency services if necessary.
+                        This camera has detected potential fire activity in the last 24 hours. Please check the feed and contact emergency services if necessary.
                       </span>
                     ) : (
                       <span className="text-green-500/90">
-                        Current readings indicate normal conditions with no fire detection.
+                        No fire detection in the last 24 hours. Current readings indicate normal conditions.
                       </span>
                     )}
                   </AlertDescription>
@@ -113,7 +121,7 @@ export const SingleCamera = () => {
                 <div className="flex items-center gap-4">
                   <Flame className="h-8 w-8 text-orange-500" />
                   <div>
-                    <p className="text-sm text-muted-foreground">Average Fire Probability</p>
+                    <p className="text-sm text-muted-foreground">24h Avg Fire Probability</p>
                     <p className="text-2xl font-bold">{averageFireProbability}%</p>
                   </div>
                 </div>
@@ -122,7 +130,7 @@ export const SingleCamera = () => {
                 <div className="flex items-center gap-4">
                   <Timer className="h-8 w-8 text-blue-500" />
                   <div>
-                    <p className="text-sm text-muted-foreground">Total Readings</p>
+                    <p className="text-sm text-muted-foreground">24h Readings</p>
                     <p className="text-2xl font-bold">{chartData.length}</p>
                   </div>
                 </div>
@@ -132,8 +140,8 @@ export const SingleCamera = () => {
             {/* Chart Card */}
             <Card className="glass-morphism">
               <CardContent className="pt-6">
-                <h2 className="text-lg font-semibold mb-4 text-gradient">Fire Detection Probability Timeline</h2>
-                {cameraDetails && cameraDetails.length > 0 ? (
+                <h2 className="text-lg font-semibold mb-4 text-gradient">Last 24 Hours Fire Detection Probability</h2>
+                {chartData.length > 0 ? (
                   <div className="h-[300px]">
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart 
@@ -183,7 +191,7 @@ export const SingleCamera = () => {
                     </ResponsiveContainer>
                   </div>
                 ) : (
-                  <p className="text-muted-foreground text-center py-8">No data available</p>
+                  <p className="text-muted-foreground text-center py-8">No data available for the last 24 hours</p>
                 )}
               </CardContent>
             </Card>
