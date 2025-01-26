@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { useToast } from "../hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { AlertTriangle, CheckCircle2, Flame, Timer } from "lucide-react";
 
 export const SingleCamera = () => {
@@ -58,23 +58,6 @@ export const SingleCamera = () => {
   const averageFireScore = chartData.length > 0 
     ? (chartData.reduce((acc, curr) => acc + curr.fireScore, 0) / chartData.length).toFixed(2)
     : 0;
-  
-  // Calculate distribution of fire scores
-  const scoreRanges = [
-    { name: '0-25%', range: [0, 25] },
-    { name: '26-50%', range: [26, 50] },
-    { name: '51-75%', range: [51, 75] },
-    { name: '76-100%', range: [76, 100] }
-  ];
-
-  const distributionData = scoreRanges.map(range => ({
-    name: range.name,
-    value: chartData.filter(d => 
-      d.fireScore >= range.range[0] && d.fireScore <= range.range[1]
-    ).length
-  }));
-
-  const COLORS = ['#22c55e', '#84cc16', '#eab308', '#ef4444'];
 
   return (
     <div className="container mx-auto p-4 max-w-[2000px] 2xl:px-0">
@@ -154,86 +137,54 @@ export const SingleCamera = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
                 </div>
               ) : cameraDetails && cameraDetails.length > 0 ? (
-                <>
-                  <div className="h-[300px] mb-6">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <LineChart 
-                        data={chartData}
-                        margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
-                      >
-                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted/20" />
-                        <XAxis 
-                          dataKey="time" 
-                          className="text-xs"
-                          tick={{ fill: 'currentColor' }}
-                          angle={-45}
-                          textAnchor="end"
-                          height={60}
-                        />
-                        <YAxis 
-                          className="text-xs"
-                          tick={{ fill: 'currentColor' }}
-                          label={{ 
-                            value: 'Fire Score (%)', 
-                            angle: -90, 
-                            position: 'insideLeft',
-                            fill: 'currentColor',
-                            style: { textAnchor: 'middle' }
-                          }}
-                        />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            borderRadius: '0.5rem',
-                            color: 'white'
-                          }}
-                          labelStyle={{ color: 'white' }}
-                        />
-                        <Line 
-                          type="monotone" 
-                          dataKey="fireScore" 
-                          stroke={hasFireDetection ? "#ef4444" : "#22c55e"}
-                          strokeWidth={2}
-                          dot={false}
-                          activeDot={{ r: 6, fill: hasFireDetection ? '#ef4444' : '#22c55e' }}
-                          isAnimationActive={true}
-                          animationDuration={1000}
-                        />
-                      </LineChart>
-                    </ResponsiveContainer>
-                  </div>
-
-                  {/* Distribution Chart */}
-                  <h2 className="text-lg font-semibold mb-4 text-gradient">Score Distribution</h2>
-                  <div className="h-[200px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={distributionData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={80}
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {distributionData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                          ))}
-                        </Pie>
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'rgba(0,0,0,0.8)',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            borderRadius: '0.5rem',
-                            color: 'white'
-                          }}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart 
+                      data={chartData}
+                      margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted/20" />
+                      <XAxis 
+                        dataKey="time" 
+                        className="text-xs"
+                        tick={{ fill: 'currentColor' }}
+                        angle={-45}
+                        textAnchor="end"
+                        height={60}
+                      />
+                      <YAxis 
+                        className="text-xs"
+                        tick={{ fill: 'currentColor' }}
+                        label={{ 
+                          value: 'Fire Score (%)', 
+                          angle: -90, 
+                          position: 'insideLeft',
+                          fill: 'currentColor',
+                          style: { textAnchor: 'middle' }
+                        }}
+                      />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'rgba(0,0,0,0.8)',
+                          border: '1px solid rgba(255,255,255,0.1)',
+                          borderRadius: '0.5rem',
+                          color: 'white'
+                        }}
+                        labelStyle={{ color: 'white' }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="fireScore" 
+                        stroke={hasFireDetection ? "#ef4444" : "#22c55e"}
+                        strokeWidth={2}
+                        dot={false}
+                        activeDot={{ r: 6, fill: hasFireDetection ? '#ef4444' : '#22c55e' }}
+                        isAnimationActive={true}
+                        animationDuration={1000}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
+                </div>
               ) : (
                 <p className="text-muted-foreground text-center py-8">No data available</p>
               )}
