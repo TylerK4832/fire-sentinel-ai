@@ -36,48 +36,21 @@ const createDynamoDBClient = async () => {
   });
 };
 
-export const getCameraData = async (id: string) => {
+export const getCameraData = async (camName: string) => {
   const docClient = await createDynamoDBClient();
 
   try {
     const command = new QueryCommand({
-      TableName: "fire-or-no-fire",
-      KeyConditionExpression: "cam_id = :camId",
-      ExpressionAttributeValues: {
-        ":camId": id,
-      },
-      Limit: 1, // Get most recent record
-      ScanIndexForward: false, // Sort in descending order (newest first)
-    });
-
-    const response = await docClient.send(command);
-    return response.Items?.[0] || null;
-  } catch (error) {
-    console.error("Error fetching camera data:", error);
-    throw error;
-  } finally {
-    if (docClient) {
-      // @ts-ignore - TypeScript doesn't know about the destroy method
-      docClient.destroy?.();
-    }
-  }
-};
-
-export const getCameraDataByName = async (camName: string) => {
-  const docClient = await createDynamoDBClient();
-
-  try {
-    const command = new QueryCommand({
-      TableName: "fire-or-no-fire",
-      IndexName: "cam_name-index",
-      KeyConditionExpression: "cam_name = :camName",
+      TableName: "fire-or-no-fire", // Your table name
+      IndexName: "cam_name-index", // Your GSI name
+      KeyConditionExpression: "cam_name = :camName", // Query based on cam_name
       ExpressionAttributeValues: {
         ":camName": camName,
       },
     });
 
     const response = await docClient.send(command);
-    return response.Items; 
+    return response.Items || []; // Return all matching items
   } catch (error) {
     console.error("Error fetching camera data by name:", error);
     throw error;
