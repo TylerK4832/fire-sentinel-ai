@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Flame, LayoutDashboard } from "lucide-react";
+import { Flame, LayoutDashboard, Grid } from "lucide-react";
 
 export const Header = () => {
   const location = useLocation();
@@ -14,7 +14,16 @@ export const Header = () => {
           </span>
         </Link>
         
-        <nav>
+        <nav className="flex items-center gap-4">
+          <Link 
+            to="/" 
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors hover:bg-white/5 ${
+              location.pathname === '/' ? 'text-orange-500' : 'text-white'
+            }`}
+          >
+            <Grid className="h-5 w-5" />
+            <span>All Cameras</span>
+          </Link>
           <Link 
             to="/dashboard" 
             className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors hover:bg-white/5 ${
