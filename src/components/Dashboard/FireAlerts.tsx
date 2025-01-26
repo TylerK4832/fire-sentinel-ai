@@ -26,7 +26,9 @@ export const FireAlerts = ({ alerts }: FireAlertsProps) => {
               <Flame className="h-6 w-6 text-green-500" />
             </div>
             <h3 className="text-lg font-semibold mb-2">No Active Fires</h3>
-            <p className="text-muted-foreground">All monitored areas are currently clear</p>
+            <p className="text-muted-foreground">
+              All monitored areas are currently clear
+            </p>
           </div>
         </CardContent>
       </Card>
@@ -61,14 +63,14 @@ export const FireAlerts = ({ alerts }: FireAlertsProps) => {
 
   return (
     <Card className="glass-morphism h-full">
-      <CardContent className="p-4 md:p-6 h-full">
+      <CardContent className="flex flex-col h-full p-4 md:p-6">
         <h2 className="text-lg font-semibold mb-4 text-gradient">Potential Active Fire Alerts</h2>
         {isMobile ? (
-          <div className="overflow-y-auto">
+          <div className="flex-1 overflow-y-auto -mx-2 px-2">
             <AlertsList />
           </div>
         ) : (
-          <ScrollArea className="h-[400px] pr-4">
+          <ScrollArea className="flex-1 pr-4">
             <AlertsList />
           </ScrollArea>
         )}
