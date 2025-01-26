@@ -1,0 +1,502 @@
+[
+{
+    "name": "Alabama Hills 1",
+    "id": "Axis-AlabamaHills1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AlabamaHills1/latest-frame.jpg"
+},
+{
+    "name": "Alabama Hills 2",
+    "id": "Axis-AlabamaHills2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AlabamaHills2/latest-frame.jpg"
+},
+{
+    "name": "Aliso Laguna 1",
+    "id": "Axis-AlisoLaguna1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AlisoLaguna1/latest-frame.jpg"
+},
+{
+    "name": "Aliso Laguna 2",
+    "id": "Axis-AlisoLaguna2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AlisoLaguna2/latest-frame.jpg"
+},
+{
+    "name": "Allen Peak",
+    "id": "Axis-AllenPeak",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AllenPeak/latest-frame.jpg"
+},
+{
+    "name": "Almaden 1",
+    "id": "Axis-Almaden1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Almaden1/latest-frame.jpg"
+},
+{
+    "name": "Almaden 2",
+    "id": "Axis-Almaden2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Almaden2/latest-frame.jpg"
+},
+{
+    "name": "Antelope Eagle Lake 1",
+    "id": "Axis-AntelopeEagleLake1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AntelopeEagleLake1/latest-frame.jpg"
+},
+{
+    "name": "Antelope Eagle Lake 2",
+    "id": "Axis-AntelopeEagleLake2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AntelopeEagleLake2/latest-frame.jpg"
+},
+{
+    "name": "Antelope Mtn Susanville",
+    "id": "Axis-AntelopeMtn",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AntelopeMtn/latest-frame.jpg"
+},
+{
+    "name": "Antelope Mtn Yreka 1",
+    "id": "Axis-AntelopeYreka1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AntelopeYreka1/latest-frame.jpg"
+},
+{
+    "name": "Antelope Mtn Yreka 2",
+    "id": "Axis-AntelopeYreka2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AntelopeYreka2/latest-frame.jpg"
+},
+{
+    "name": "Anthony Peak Lookout 1",
+    "id": "Axis-AnthonyPeakLookout1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AnthonyPeakLookout1/latest-frame.jpg"
+},
+{
+    "name": "Anthony Peak Lookout 2",
+    "id": "Axis-AnthonyPeakLookout2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AnthonyPeakLookout2/latest-frame.jpg"
+},
+{
+    "name": "Arcadia 1",
+    "id": "Axis-Arcadia1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Arcadia1/latest-frame.jpg"
+},
+{
+    "name": "Arcadia 2",
+    "id": "Axis-Arcadia2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Arcadia2/latest-frame.jpg"
+},
+{
+    "name": "Argonaut",
+    "id": "Axis-Argonaut",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Argonaut/latest-frame.jpg"
+},
+{
+    "name": "Artois",
+    "id": "Axis-Artois",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Artois/latest-frame.jpg"
+},
+{
+    "name": "Artois 2",
+    "id": "Axis-Artois2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Artois2/latest-frame.jpg"
+},
+{
+    "name": "Atascadero HWY41 1",
+    "id": "Axis-AtascaderoHwy411",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AtascaderoHwy411/latest-frame.jpg"
+},
+{
+    "name": "Atascadero HWY41 2",
+    "id": "Axis-AtascaderoHwy412",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AtascaderoHwy412/latest-frame.jpg"
+},
+{
+    "name": "Atlas Peak",
+    "id": "Axis-Atlas",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Atlas/latest-frame.jpg"
+},
+{
+    "name": "Atlas Peak West",
+    "id": "Axis-AtlasPeakWest",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-AtlasPeakWest/latest-frame.jpg"
+},
+{
+    "name": "PCWA Auburn",
+    "id": "Axis-Auburn1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Auburn1/latest-frame.jpg"
+},
+{
+    "name": "Avalon 1 (Catalina)",
+    "id": "Axis-Avalon1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Avalon1/latest-frame.jpg"
+},
+{
+    "name": "Avalon 2 (Catalina)",
+    "id": "Axis-Avalon2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Avalon2/latest-frame.jpg"
+},
+{
+    "name": "Bailey Peak 1",
+    "id": "Axis-BaileyPeak1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaileyPeak1/latest-frame.jpg"
+},
+{
+    "name": "Bailey Peak 2",
+    "id": "Axis-BaileyPeak2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaileyPeak2/latest-frame.jpg"
+},
+{
+    "name": "Bald Hill East",
+    "id": "Axis-BaldHillEast",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldHillEast/latest-frame.jpg"
+},
+{
+    "name": "Bald Jesse 1",
+    "id": "Axis-BaldJesse",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldJesse/latest-frame.jpg"
+},
+{
+    "name": "Bald Jesse 2",
+    "id": "Axis-BaldJesse2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldJesse2/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Butte 1",
+    "id": "Axis-BaldMtnButte1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnButte1/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Butte 2",
+    "id": "Axis-BaldMtnButte2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnButte2/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Guinda 1",
+    "id": "Axis-BaldMtnGuinda1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnGuinda1/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Guinda 2",
+    "id": "Axis-BaldMtnGuinda2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnGuinda2/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn La Porte",
+    "id": "Axis-BaldMtnLaPorte",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnLaPorte/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Napa",
+    "id": "Axis-BaldMtnNapa",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnNapa/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Sequoia 1",
+    "id": "Axis-BaldMtnSequoia1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnSequoia1/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Sequoia 2",
+    "id": "Axis-BaldMtnSequoia2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnSequoia2/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Tower (LAC) 1",
+    "id": "Axis-BaldMtnTower1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnTower1/latest-frame.jpg"
+},
+{
+    "name": "Bald Mtn Tower (LAC) 2",
+    "id": "Axis-BaldMtnTower2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldMtnTower2/latest-frame.jpg"
+},
+{
+    "name": "Bald Hill West",
+    "id": "Axis-Baldhillwest",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Baldhillwest/latest-frame.jpg"
+},
+{
+    "name": "Baldwin Hills 1",
+    "id": "Axis-BaldwinHills1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldwinHills1/latest-frame.jpg"
+},
+{
+    "name": "Baldwin Hills 2",
+    "id": "Axis-BaldwinHills2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldwinHills2/latest-frame.jpg"
+},
+{
+    "name": "Baldwin Lake 1",
+    "id": "Axis-BaldwinLake1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldwinLake1/latest-frame.jpg"
+},
+{
+    "name": "Baldwin Lake 2",
+    "id": "Axis-BaldwinLake2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BaldwinLake2/latest-frame.jpg"
+},
+{
+    "name": "Ball Rock",
+    "id": "Axis-BallRock",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BallRock/latest-frame.jpg"
+},
+{
+    "name": "Ballard Ridge 1",
+    "id": "Axis-BallardRidge1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BallardRidge1/latest-frame.jpg"
+},
+{
+    "name": "Ballard Ridge 2",
+    "id": "Axis-BallardRidge2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BallardRidge2/latest-frame.jpg"
+},
+{
+    "name": "Banner Mtn 1",
+    "id": "Axis-BannerMtn1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BannerMtn1/latest-frame.jpg"
+},
+{
+    "name": "Banner Mtn 2",
+    "id": "Axis-BannerMtn2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BannerMtn2/latest-frame.jpg"
+},
+{
+    "name": "Barnabe Peak East",
+    "id": "Axis-BarnabeEast",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BarnabeEast/latest-frame.jpg"
+},
+{
+    "name": "Barham North",
+    "id": "Axis-BarnhamNorth",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BarnhamNorth/latest-frame.jpg"
+},
+{
+    "name": "Barham South",
+    "id": "Axis-BarnhamSouth",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BarnhamSouth/latest-frame.jpg"
+},
+{
+    "name": "Barr Ranch 1",
+    "id": "Axis-BarrRanch",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BarrRanch/latest-frame.jpg"
+},
+{
+    "name": "Barr Ranch 2",
+    "id": "Axis-BarrRanch2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BarrRanch2/latest-frame.jpg"
+},
+{
+    "name": "Bealville 1",
+    "id": "Axis-Bealville1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Bealville1/latest-frame.jpg"
+},
+{
+    "name": "Bealville 2",
+    "id": "Axis-Bealville2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Bealville2/latest-frame.jpg"
+},
+{
+    "name": "Bear Clover 1",
+    "id": "Axis-BearClover1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearClover1/latest-frame.jpg"
+},
+{
+    "name": "Bear Clover 2",
+    "id": "Axis-BearClover2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearClover2/latest-frame.jpg"
+},
+{
+    "name": "Bear Mtn Fresno 1",
+    "id": "Axis-BearMtnFresno1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearMtnFresno1/latest-frame.jpg"
+},
+{
+    "name": "Bear Mtn Fresno 2",
+    "id": "Axis-BearMtnFresno2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearMtnFresno2/latest-frame.jpg"
+},
+{
+    "name": "Bear Mtn. Kern 1",
+    "id": "Axis-BearMtnKern1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearMtnKern1/latest-frame.jpg"
+},
+{
+    "name": "Bear Mtn. Kern 2",
+    "id": "Axis-BearMtnKern2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearMtnKern2/latest-frame.jpg"
+},
+{
+    "name": "Bear Mtn North",
+    "id": "Axis-BearMtnNorth",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearMtnNorth/latest-frame.jpg"
+},
+{
+    "name": "Bear Mtn Shasta 1",
+    "id": "Axis-BearMtnShasta",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearMtnShasta/latest-frame.jpg"
+},
+{
+    "name": "Bear Mtn Shasta 2",
+    "id": "Axis-BearMtnShasta2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearMtnShasta2/latest-frame.jpg"
+},
+{
+    "name": "Bear Mtn South",
+    "id": "Axis-BearMtnSouth",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearMtnSouth/latest-frame.jpg"
+},
+{
+    "name": "Bear Peak North",
+    "id": "Axis-BearPeakNorth",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearPeakNorth/latest-frame.jpg"
+},
+{
+    "name": "Bear Peak South 1",
+    "id": "Axis-BearPeakSouth",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearPeakSouth/latest-frame.jpg"
+},
+{
+    "name": "Bear Peak South 2",
+    "id": "Axis-BearPeakSouth2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BearPeakSouth2/latest-frame.jpg"
+},
+{
+    "name": "Beckwourth Peak 1",
+    "id": "Axis-Beckworth",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Beckworth/latest-frame.jpg"
+},
+{
+    "name": "Beckwourth Peak 2",
+    "id": "Axis-Beckworth2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Beckworth2/latest-frame.jpg"
+},
+{
+    "name": "Matilija 1",
+    "id": "Axis-BeeHill1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BeeHill1/latest-frame.jpg"
+},
+{
+    "name": "Matilija 2",
+    "id": "Axis-BeeHill2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BeeHill2/latest-frame.jpg"
+},
+{
+    "name": "Bel Air Ridge 1",
+    "id": "Axis-BelAirRidge1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BelAirRidge1/latest-frame.jpg"
+},
+{
+    "name": "Bel Air Ridge 2",
+    "id": "Axis-BelAirRidge2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BelAirRidge2/latest-frame.jpg"
+},
+{
+    "name": "Ben Bolte 1",
+    "id": "Axis-BenBolte1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BenBolte1/latest-frame.jpg"
+},
+{
+    "name": "Ben Bolte 2",
+    "id": "Axis-BenBolte2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BenBolte2/latest-frame.jpg"
+},
+{
+    "name": "Berkeley Downtown",
+    "id": "Axis-Berkeley",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Berkeley/latest-frame.jpg"
+},
+{
+    "name": "Berryessa Peak",
+    "id": "Axis-Berryessa",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Berryessa/latest-frame.jpg"
+},
+{
+    "name": "Big Black Mtn",
+    "id": "Axis-BigBlack",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BigBlack/latest-frame.jpg"
+},
+{
+    "name": "Big John",
+    "id": "Axis-BigJohn1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BigJohn1/latest-frame.jpg"
+},
+{
+    "name": "Big Rock Ridge",
+    "id": "Axis-BigRock",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BigRock/latest-frame.jpg"
+},
+{
+    "name": "Big Valley",
+    "id": "Axis-BigValley1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BigValley1/latest-frame.jpg"
+},
+{
+    "name": "Biggs",
+    "id": "Axis-Biggs1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Biggs1/latest-frame.jpg"
+},
+{
+    "name": "Birch Hill 1 (Palomar)",
+    "id": "Axis-Birch",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Birch/latest-frame.jpg"
+},
+{
+    "name": "Birch Hill 2 (Palomar)",
+    "id": "Axis-Birch2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-Birch2/latest-frame.jpg"
+},
+{
+    "name": "Bird Springs 1",
+    "id": "Axis-BirdSprings1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BirdSprings1/latest-frame.jpg"
+},
+{
+    "name": "Bird Springs 2",
+    "id": "Axis-BirdSprings2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BirdSprings2/latest-frame.jpg"
+},
+{
+    "name": "Black Mtn SCC",
+    "id": "Axis-BlackMtSCC",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BlackMtSCC/latest-frame.jpg"
+},
+{
+    "name": "Black Mtn Lassen",
+    "id": "Axis-BlackMtnLassen1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BlackMtnLassen1/latest-frame.jpg"
+},
+{
+    "name": "Black Mtn Marin",
+    "id": "Axis-BlackMtnMarin",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BlackMtnMarin/latest-frame.jpg"
+},
+{
+    "name": "Black Mtn. Lookout (Riverside) 2",
+    "id": "Axis-BlackMtnRiverside2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BlackMtnRiverside2/latest-frame.jpg"
+},
+{
+    "name": "Black Mtn SLO",
+    "id": "Axis-BlackMtnSLO",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BlackMtnSLO/latest-frame.jpg"
+},
+{
+    "name": "Black Oak",
+    "id": "Axis-BlackOak",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BlackOak/latest-frame.jpg"
+},
+{
+    "name": "Bloomer Lookout 1",
+    "id": "Axis-BloomerLookout1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BloomerLookout1/latest-frame.jpg"
+},
+{
+    "name": "Bloomer Lookout 2",
+    "id": "Axis-BloomerLookout2",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BloomerLookout2/latest-frame.jpg"
+},
+{
+    "name": "Blue Canyon",
+    "id": "Axis-BlueCanyon",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BlueCanyon/latest-frame.jpg"
+},
+{
+    "name": "Blue Mtn Calaveras 1",
+    "id": "Axis-BlueMtnCalaveras1",
+    "link": "https://cameras.alertcalifornia.org/public-camera-data/Axis-BlueMtnCalaveras1/latest-frame.jpg"
+}
+]
