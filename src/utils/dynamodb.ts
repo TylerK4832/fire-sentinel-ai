@@ -42,11 +42,12 @@ export const getCameraData = async (camName: string) => {
   try {
     const command = new QueryCommand({
       TableName: "fire-or-no-fire", // Your table name
-      IndexName: "cam_name-index", // Your GSI name
+      IndexName: "cam_name-timestamp-index", // Your GSI name
       KeyConditionExpression: "cam_name = :camName", // Query based on cam_name
       ExpressionAttributeValues: {
         ":camName": camName,
       },
+      ScanIndexForward: true,
     });
 
     const response = await docClient.send(command);
