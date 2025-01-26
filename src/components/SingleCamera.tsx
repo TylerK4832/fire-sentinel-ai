@@ -1,9 +1,8 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getCameras } from "../data/cameras";
 import { getCameraData } from "../utils/dynamodb";
 import { CameraFeed } from "./CameraFeed";
-import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { useToast } from "../hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
@@ -40,9 +39,6 @@ export const SingleCamera = () => {
     return (
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold mb-6">Camera not found</h1>
-        <Link to="/">
-          <Button>Back to Dashboard</Button>
-        </Link>
       </div>
     );
   }
@@ -61,12 +57,7 @@ export const SingleCamera = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-[2000px] 2xl:px-0">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gradient">{camera.name}</h1>
-        <Link to="/">
-          <Button variant="outline" className="glass-morphism">Back to Dashboard</Button>
-        </Link>
-      </div>
+      <h1 className="text-2xl font-bold text-gradient mb-6">{camera.name}</h1>
       
       <div className="grid grid-cols-1 xl:grid-cols-[65%_33%] gap-6">
         <div className="h-[calc(100vh-12rem)]">
@@ -110,7 +101,7 @@ export const SingleCamera = () => {
           <div className="grid grid-cols-2 gap-4 mb-4">
             <Card className="glass-morphism p-4">
               <div className="flex items-center gap-4">
-                <Flame className="h-8 w-8 text-red-500" />
+                <Flame className="h-8 w-8 text-orange-500" />
                 <div>
                   <p className="text-sm text-muted-foreground">Average Fire Probability</p>
                   <p className="text-2xl font-bold">{averageFireProbability}%</p>
