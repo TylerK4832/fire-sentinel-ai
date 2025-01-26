@@ -7,9 +7,11 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import { DashboardHeader } from "./DashboardHeader";
 import { TrendChart } from "./TrendChart";
 import { useToast } from "../../hooks/use-toast";
+import { useIsMobile } from "../../hooks/use-mobile";
 
 export const Dashboard = () => {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   const { data: cameras = [] } = useQuery({
     queryKey: ['cameras'],
@@ -84,8 +86,12 @@ export const Dashboard = () => {
     }, [])
     .sort((a, b) => a.time.localeCompare(b.time));
 
+  const containerClass = isMobile
+    ? "min-h-screen container mx-auto px-4 py-8"
+    : "h-[calc(100vh-5rem)] container mx-auto px-4 py-8 overflow-hidden";
+
   return (
-    <div className="h-[calc(100vh-5rem)] container mx-auto px-4 py-8 overflow-hidden">
+    <div className={containerClass}>
       <DashboardHeader 
         title="Wildfire Monitoring Dashboard"
         description="Real-time fire detection analytics across all cameras"
@@ -98,7 +104,7 @@ export const Dashboard = () => {
         totalReadings={allCameraData.length}
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-[calc(100vh-24rem)] overflow-hidden">
+      <div className={`grid grid-cols-1 lg:grid-cols-2 gap-6 ${!isMobile ? "h-[calc(100vh-24rem)]" : ""}`}>
         <div className="h-full">
           <FireAlerts alerts={fireAlerts} />
         </div>

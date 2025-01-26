@@ -2,6 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Flame } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useIsMobile } from "../../hooks/use-mobile";
 
 interface FireAlert {
   cameraId: string;
@@ -14,6 +15,8 @@ interface FireAlertsProps {
 }
 
 export const FireAlerts = ({ alerts }: FireAlertsProps) => {
+  const isMobile = useIsMobile();
+
   if (alerts.length === 0) {
     return (
       <Card className="glass-morphism h-full">
@@ -32,9 +35,9 @@ export const FireAlerts = ({ alerts }: FireAlertsProps) => {
 
   return (
     <Card className="glass-morphism h-full">
-      <CardContent className="p-6 h-full">
+      <CardContent className="p-6 h-full flex flex-col">
         <h2 className="text-lg font-semibold mb-4 text-gradient">Potential Active Fire Alerts</h2>
-        <ScrollArea className="h-[calc(100%-3rem)]">
+        <ScrollArea className={isMobile ? "h-[400px]" : "flex-1"}>
           <div className="space-y-4 pr-4">
             {alerts.map((alert) => (
               <Link
