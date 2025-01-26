@@ -1,76 +1,43 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { 
-  DynamoDBDocumentClient, 
+import {
+  DynamoDBDocumentClient,
   QueryCommand,
-  GetCommand
+  QueryCommandInput,
 } from "@aws-sdk/lib-dynamodb";
-import { supabase } from "../integrations/supabase/client";
 
-// Cache the DynamoDB client instance
-let cachedClient: DynamoDBDocumentClient | null = null;
-let credentialsExpiry: number | null = null;
+let dynamoClient: DynamoDBDocumentClient | null = null;
 
-const createDynamoDBClient = async () => {
-  // Check if we have a valid cached client
-  if (cachedClient && credentialsExpiry && Date.now() < credentialsExpiry) {
-    return cachedClient;
+const getDynamoClient = () => {
+  if (!dynamoClient) {
+    const client = new DynamoDBClient({
+      region: "us-west-1",
+      credentials: {
+        accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID,
+        secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY,
+      },
+    });
+    dynamoClient = DynamoDBDocumentClient.from(client);
   }
-
-  // Fetch AWS credentials from Supabase secrets
-  const [accessKeyResponse, secretKeyResponse] = await Promise.all([
-    supabase.functions.invoke('get-secret', {
-      body: { name: 'AWS_ACCESS_KEY_ID' }
-    }),
-    supabase.functions.invoke('get-secret', {
-      body: { name: 'AWS_SECRET_ACCESS_KEY' }
-    })
-  ]);
-
-  if (accessKeyResponse.error || secretKeyResponse.error) {
-    console.error("Error fetching AWS credentials:", accessKeyResponse.error || secretKeyResponse.error);
-    throw new Error("Failed to fetch AWS credentials");
-  }
-
-  const client = new DynamoDBClient({
-    region: "us-east-2",
-    credentials: {
-      accessKeyId: accessKeyResponse.data.value,
-      secretAccessKey: secretKeyResponse.data.value,
-    },
-  });
-
-  cachedClient = DynamoDBDocumentClient.from(client, {
-    marshallOptions: {
-      removeUndefinedValues: true,
-    },
-  });
-
-  // Cache credentials for 55 minutes (AWS tokens typically expire after 1 hour)
-  credentialsExpiry = Date.now() + (55 * 60 * 1000);
-
-  return cachedClient;
+  return dynamoClient;
 };
 
-export const getCameraData = async (camName: string) => {
-  const docClient = await createDynamoDBClient();
-
+export const getCameraData = async (cameraId: string) => {
+  const client = getDynamoClient();
+  
   try {
-    const command = new QueryCommand({
-      TableName: "fire-or-no-fire",
-      IndexName: "cam_name-timestamp-index",
+    const params: QueryCommandInput = {
+      TableName: "camera_data",
       KeyConditionExpression: "cam_name = :camName",
-      FilterExpression: "#ts >= :dayAgo",
-      ExpressionAttributeNames: {
-        "#ts": "timestamp"
-      },
       ExpressionAttributeValues: {
-        ":camName": camName,
-        ":dayAgo": Math.floor(Date.now()/1000) - (24 * 60 * 60)
+        ":camName": cameraId,
       },
-      ScanIndexForward: true
-    });
+      ScanIndexForward: false, // Get most recent first
+      Limit: 100, // Limit to last 100 readings
+    };
 
-    const response = await docClient.send(command);
+    const command = new QueryCommand(params);
+    const response = await client.send(command);
+    
     return response.Items || [];
   } catch (error) {
     console.error("Error fetching camera data by name:", error);

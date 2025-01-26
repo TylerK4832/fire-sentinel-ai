@@ -24,28 +24,29 @@ export const Dashboard = () => {
   const { data: allCameraData = [], isLoading } = useQuery({
     queryKey: ['all-camera-data'],
     queryFn: async () => {
-      // Use Promise.all for parallel fetching
-      const promises = cameras.map(camera => getCameraData(camera.id));
-      const results = await Promise.all(promises);
-      return results.flat();
-    },
-    enabled: cameras.length > 0,
-    staleTime: 60 * 1000, // 1 minute
-    gcTime: 2 * 60 * 1000, // 2 minutes
-    meta: {
-      onError: () => {
+      try {
+        // Use Promise.all for parallel fetching
+        const promises = cameras.map(camera => getCameraData(camera.id));
+        const results = await Promise.all(promises);
+        return results.flat();
+      } catch (error) {
+        console.error('Error fetching camera data:', error);
         toast({
           title: "Error",
           description: "Failed to load camera data.",
           variant: "destructive"
         });
+        return [];
       }
-    }
+    },
+    enabled: cameras.length > 0,
+    staleTime: 60 * 1000, // 1 minute
+    gcTime: 2 * 60 * 1000, // 2 minutes
   });
 
   // Memoize filtered data to prevent unnecessary recalculations
   const filteredData = useMemo(() => {
-    if (!allCameraData) return [];
+    if (!allCameraData?.length) return [];
     
     const now = Date.now();
     const twentyFourHoursAgo = now - (24 * 60 * 60 * 1000);
@@ -58,12 +59,12 @@ export const Dashboard = () => {
 
   // Memoize fire alerts calculation
   const fireAlerts = useMemo(() => {
-    if (!cameras || !filteredData) return [];
+    if (!cameras?.length || !filteredData?.length) return [];
 
     return cameras
       .map(camera => {
         const cameraData = filteredData.filter(data => data.cam_name === camera.id);
-        if (cameraData.length === 0) return null;
+        if (!cameraData.length) return null;
         
         const latestReading = cameraData[cameraData.length - 1];
         const probability = Number((latestReading.fire_score * 100).toFixed(2));
@@ -94,6 +95,8 @@ export const Dashboard = () => {
 
   // Memoize chart data preparation
   const chartData = useMemo(() => {
+    if (!filteredData?.length) return [];
+
     return filteredData
       .reduce((acc: any[], curr) => {
         const timestamp = new Date(curr.timestamp * 1000);
