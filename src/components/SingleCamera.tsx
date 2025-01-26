@@ -7,7 +7,7 @@ import { Card, CardContent } from "./ui/card";
 import { useToast } from "../hooks/use-toast";
 import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { AlertTriangle, CheckCircle2, Flame, Timer } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Flame, Timer, Loader } from "lucide-react";
 
 export const SingleCamera = () => {
   const { id } = useParams();
@@ -64,7 +64,14 @@ export const SingleCamera = () => {
           <CameraFeed camera={camera} large />
         </div>
         
-        {!isLoadingDetails && (
+        {isLoadingDetails ? (
+          <div className="space-y-6">
+            <div className="flex flex-col items-center justify-center min-h-[200px] gap-4">
+              <Loader className="h-12 w-12 text-primary animate-spin" />
+              <p className="text-lg text-muted-foreground">Loading camera data...</p>
+            </div>
+          </div>
+        ) : (
           <div className="space-y-6">
             {/* Fire Status Alert */}
             <Alert 
