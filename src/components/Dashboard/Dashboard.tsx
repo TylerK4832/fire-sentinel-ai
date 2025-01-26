@@ -3,8 +3,9 @@ import { getCameras } from "../../data/cameras";
 import { getCameraData } from "../../utils/dynamodb";
 import { StatCards } from "./StatCards";
 import { FireAlerts } from "./FireAlerts";
-import { Card, CardContent } from "../ui/card";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { LoadingSpinner } from "./LoadingSpinner";
+import { DashboardHeader } from "./DashboardHeader";
+import { TrendChart } from "./TrendChart";
 import { useToast } from "../../hooks/use-toast";
 
 export const Dashboard = () => {
@@ -15,7 +16,6 @@ export const Dashboard = () => {
     queryFn: getCameras
   });
 
-  // Fetch data for all cameras
   const { data: allCameraData = [], isLoading } = useQuery({
     queryKey: ['all-camera-data'],
     queryFn: async () => {
@@ -37,11 +37,7 @@ export const Dashboard = () => {
   });
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   // Calculate statistics
@@ -94,10 +90,10 @@ export const Dashboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-gradient">Wildfire Monitoring Dashboard</h1>
-        <p className="text-muted-foreground">Real-time fire detection analytics across all cameras</p>
-      </div>
+      <DashboardHeader 
+        title="Wildfire Monitoring Dashboard"
+        description="Real-time fire detection analytics across all cameras"
+      />
 
       <StatCards
         totalCameras={cameras.length}
@@ -108,55 +104,7 @@ export const Dashboard = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <FireAlerts alerts={fireAlerts} />
-        
-        <Card className="glass-morphism">
-          <CardContent className="pt-6">
-            <h2 className="text-lg font-semibold mb-4 text-gradient">Average Fire Probability Trend</h2>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart 
-                  data={chartData}
-                  margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
-                >
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-muted/20" />
-                  <XAxis 
-                    dataKey="time" 
-                    className="text-xs"
-                    tick={{ fill: 'currentColor' }}
-                  />
-                  <YAxis 
-                    className="text-xs"
-                    tick={{ fill: 'currentColor' }}
-                    label={{ 
-                      value: 'Avg Fire Probability (%)', 
-                      angle: -90, 
-                      position: 'insideLeft',
-                      fill: 'currentColor',
-                      style: { textAnchor: 'middle' }
-                    }}
-                  />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: 'rgba(0,0,0,0.8)',
-                      border: '1px solid rgba(255,255,255,0.1)',
-                      borderRadius: '0.5rem',
-                      color: 'white'
-                    }}
-                    labelStyle={{ color: 'white' }}
-                  />
-                  <Line 
-                    type="monotone" 
-                    dataKey="avgProbability" 
-                    stroke="#ef4444"
-                    strokeWidth={2}
-                    dot={false}
-                    activeDot={{ r: 6, fill: '#ef4444' }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
-          </CardContent>
-        </Card>
+        <TrendChart data={chartData} />
       </div>
     </div>
   );
