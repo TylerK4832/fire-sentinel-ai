@@ -64,124 +64,124 @@ export const SingleCamera = () => {
           <CameraFeed camera={camera} large />
         </div>
         
-        <div className="space-y-6">
-          {/* Fire Status Alert */}
-          <Alert 
-            variant={hasFireDetection ? "destructive" : "default"} 
-            className={`glass-morphism ${!hasFireDetection ? 'border-green-500/30 bg-green-500/5' : 'border-red-500/30 bg-red-500/5'}`}
-          >
-            <div className="flex items-start gap-6">
-              {hasFireDetection ? (
-                <AlertTriangle className="h-10 w-10 text-red-500 shrink-0" />
-              ) : (
-                <CheckCircle2 className="h-10 w-10 text-green-500 shrink-0" />
-              )}
-              <div>
-                <AlertTitle className="font-bold text-xl mb-3">
-                  {hasFireDetection ? (
-                    <span className="text-red-500">Fire Detected!</span>
-                  ) : (
-                    <span className="text-green-500">All Clear - No Fire Detected</span>
-                  )}
-                </AlertTitle>
-                <AlertDescription className="text-lg">
-                  {hasFireDetection ? (
-                    "This camera has detected potential fire activity. Please check the feed and contact emergency services if necessary."
-                  ) : (
-                    <span className="text-green-500/90">
-                      Current readings indicate normal conditions with no fire detection.
-                    </span>
-                  )}
-                </AlertDescription>
+        {!isLoadingDetails && (
+          <div className="space-y-6">
+            {/* Fire Status Alert */}
+            <Alert 
+              variant={hasFireDetection ? "destructive" : "default"} 
+              className={`glass-morphism ${!hasFireDetection ? 'border-green-500/30 bg-green-500/5' : 'border-red-500/30 bg-red-500/5'}`}
+            >
+              <div className="flex items-start gap-6">
+                {hasFireDetection ? (
+                  <AlertTriangle className="h-10 w-10 text-red-500 shrink-0" />
+                ) : (
+                  <CheckCircle2 className="h-10 w-10 text-green-500 shrink-0" />
+                )}
+                <div>
+                  <AlertTitle className="font-bold text-xl mb-3">
+                    {hasFireDetection ? (
+                      <span className="text-red-500">Fire Detected!</span>
+                    ) : (
+                      <span className="text-green-500">All Clear - No Fire Detected</span>
+                    )}
+                  </AlertTitle>
+                  <AlertDescription className="text-lg">
+                    {hasFireDetection ? (
+                      <span className="text-white">
+                        This camera has detected potential fire activity. Please check the feed and contact emergency services if necessary.
+                      </span>
+                    ) : (
+                      <span className="text-green-500/90">
+                        Current readings indicate normal conditions with no fire detection.
+                      </span>
+                    )}
+                  </AlertDescription>
+                </div>
               </div>
-            </div>
-          </Alert>
+            </Alert>
 
-          {/* Analytics Cards */}
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <Card className="glass-morphism p-4">
-              <div className="flex items-center gap-4">
-                <Flame className="h-8 w-8 text-orange-500" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Average Fire Probability</p>
-                  <p className="text-2xl font-bold">{averageFireProbability}%</p>
+            {/* Analytics Cards */}
+            <div className="grid grid-cols-2 gap-4 mb-4">
+              <Card className="glass-morphism p-4">
+                <div className="flex items-center gap-4">
+                  <Flame className="h-8 w-8 text-orange-500" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Average Fire Probability</p>
+                    <p className="text-2xl font-bold">{averageFireProbability}%</p>
+                  </div>
                 </div>
-              </div>
-            </Card>
-            <Card className="glass-morphism p-4">
-              <div className="flex items-center gap-4">
-                <Timer className="h-8 w-8 text-blue-500" />
-                <div>
-                  <p className="text-sm text-muted-foreground">Total Readings</p>
-                  <p className="text-2xl font-bold">{chartData.length}</p>
+              </Card>
+              <Card className="glass-morphism p-4">
+                <div className="flex items-center gap-4">
+                  <Timer className="h-8 w-8 text-blue-500" />
+                  <div>
+                    <p className="text-sm text-muted-foreground">Total Readings</p>
+                    <p className="text-2xl font-bold">{chartData.length}</p>
+                  </div>
                 </div>
-              </div>
+              </Card>
+            </div>
+
+            {/* Chart Card */}
+            <Card className="glass-morphism">
+              <CardContent className="pt-6">
+                <h2 className="text-lg font-semibold mb-4 text-gradient">Fire Detection Probability Timeline</h2>
+                {cameraDetails && cameraDetails.length > 0 ? (
+                  <div className="h-[300px]">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart 
+                        data={chartData}
+                        margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" className="stroke-muted/20" />
+                        <XAxis 
+                          dataKey="time" 
+                          className="text-xs"
+                          tick={{ fill: 'currentColor' }}
+                          angle={-45}
+                          textAnchor="end"
+                          height={60}
+                        />
+                        <YAxis 
+                          className="text-xs"
+                          tick={{ fill: 'currentColor' }}
+                          label={{ 
+                            value: 'Fire Probability (%)', 
+                            angle: -90, 
+                            position: 'insideLeft',
+                            fill: 'currentColor',
+                            style: { textAnchor: 'middle' }
+                          }}
+                        />
+                        <Tooltip 
+                          contentStyle={{ 
+                            backgroundColor: 'rgba(0,0,0,0.8)',
+                            border: '1px solid rgba(255,255,255,0.1)',
+                            borderRadius: '0.5rem',
+                            color: 'white'
+                          }}
+                          labelStyle={{ color: 'white' }}
+                        />
+                        <Line 
+                          type="monotone" 
+                          dataKey="fireProbability" 
+                          stroke={hasFireDetection ? "#ef4444" : "#22c55e"}
+                          strokeWidth={2}
+                          dot={false}
+                          activeDot={{ r: 6, fill: hasFireDetection ? '#ef4444' : '#22c55e' }}
+                          isAnimationActive={true}
+                          animationDuration={1000}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                ) : (
+                  <p className="text-muted-foreground text-center py-8">No data available</p>
+                )}
+              </CardContent>
             </Card>
           </div>
-
-          {/* Chart Card */}
-          <Card className="glass-morphism">
-            <CardContent className="pt-6">
-              <h2 className="text-lg font-semibold mb-4 text-gradient">Fire Detection Probability Timeline</h2>
-              {isLoadingDetails ? (
-                <div className="flex items-center justify-center h-32">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
-                </div>
-              ) : cameraDetails && cameraDetails.length > 0 ? (
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart 
-                      data={chartData}
-                      margin={{ top: 5, right: 30, left: 20, bottom: 25 }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted/20" />
-                      <XAxis 
-                        dataKey="time" 
-                        className="text-xs"
-                        tick={{ fill: 'currentColor' }}
-                        angle={-45}
-                        textAnchor="end"
-                        height={60}
-                      />
-                      <YAxis 
-                        className="text-xs"
-                        tick={{ fill: 'currentColor' }}
-                        label={{ 
-                          value: 'Fire Probability (%)', 
-                          angle: -90, 
-                          position: 'insideLeft',
-                          fill: 'currentColor',
-                          style: { textAnchor: 'middle' }
-                        }}
-                      />
-                      <Tooltip 
-                        contentStyle={{ 
-                          backgroundColor: 'rgba(0,0,0,0.8)',
-                          border: '1px solid rgba(255,255,255,0.1)',
-                          borderRadius: '0.5rem',
-                          color: 'white'
-                        }}
-                        labelStyle={{ color: 'white' }}
-                      />
-                      <Line 
-                        type="monotone" 
-                        dataKey="fireProbability" 
-                        stroke={hasFireDetection ? "#ef4444" : "#22c55e"}
-                        strokeWidth={2}
-                        dot={false}
-                        activeDot={{ r: 6, fill: hasFireDetection ? '#ef4444' : '#22c55e' }}
-                        isAnimationActive={true}
-                        animationDuration={1000}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </div>
-              ) : (
-                <p className="text-muted-foreground text-center py-8">No data available</p>
-              )}
-            </CardContent>
-          </Card>
-        </div>
+        )}
       </div>
     </div>
   );
