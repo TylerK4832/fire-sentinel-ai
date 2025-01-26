@@ -27,15 +27,22 @@ export const AlertsPage = () => {
   const { data: subscriptions = [], isLoading: subscriptionsLoading } = useQuery({
     queryKey: ['alert-subscriptions'],
     queryFn: async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("User not authenticated");
+
       const { data, error } = await supabase
         .from('alert_subscriptions')
         .select('*');
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error fetching subscriptions:", error);
+        throw error;
+      }
       return data as AlertSubscription[];
     },
     meta: {
-      onError: () => {
+      onError: (error: Error) => {
+        console.error("Subscription query error:", error);
         toast({
           title: "Error",
           description: "Failed to load alert subscriptions.",
@@ -48,17 +55,31 @@ export const AlertsPage = () => {
   const createSubscription = useMutation({
     mutationFn: async ({ cameraId, phoneNumber }: SubscriptionFormValues) => {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("User not authenticated");
+      if (!user) {
+        console.error("No authenticated user found");
+        throw new Error("User not authenticated");
+      }
 
-      const { error } = await supabase
+      console.log("Attempting to create subscription with:", {
+        camera_id: cameraId,
+        phone_number: phoneNumber,
+        user_id: user.id
+      });
+
+      const { data, error } = await supabase
         .from('alert_subscriptions')
-        .insert([{ 
-          camera_id: cameraId, 
+        .insert([{
+          camera_id: cameraId,
           phone_number: phoneNumber,
           user_id: user.id
         }]);
-      
-      if (error) throw error;
+
+      if (error) {
+        console.error("Error creating subscription:", error);
+        throw error;
+      }
+
+      return data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['alert-subscriptions'] });
@@ -67,10 +88,11 @@ export const AlertsPage = () => {
         description: "Alert subscription created successfully.",
       });
     },
-    onError: () => {
+    onError: (error: Error) => {
+      console.error("Mutation error:", error);
       toast({
         title: "Error",
-        description: "Failed to create alert subscription.",
+        description: `Failed to create alert subscription: ${error.message}`,
         variant: "destructive"
       });
     }
