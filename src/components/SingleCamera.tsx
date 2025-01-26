@@ -52,6 +52,11 @@ export const SingleCamera = () => {
     );
   }
 
+  // Convert timestamp to readable date
+  const formatTimestamp = (timestamp: number) => {
+    return new Date(timestamp * 1000).toLocaleString();
+  };
+
   return (
     <div className="container mx-auto p-4">
       <div className="flex items-center justify-between mb-6">
@@ -74,26 +79,30 @@ export const SingleCamera = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
                 </div>
               ) : cameraDetails && cameraDetails.length > 0 ? (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Index</TableHead>
-                      <TableHead>Value</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {cameraDetails.map((item: any, index: number) => (
-                      <TableRow key={index}>
-                        <TableCell className="font-medium">{index}</TableCell>
-                        <TableCell>
-                          <pre className="whitespace-pre-wrap text-sm">
-                            {JSON.stringify(item, null, 2)}
-                          </pre>
-                        </TableCell>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Time</TableHead>
+                        <TableHead>Fire Score</TableHead>
+                        <TableHead>No Fire Score</TableHead>
+                        <TableHead>Label</TableHead>
+                        <TableHead>Camera</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {cameraDetails.map((item: any) => (
+                        <TableRow key={item.id}>
+                          <TableCell>{formatTimestamp(item.timestamp)}</TableCell>
+                          <TableCell>{(item.fire_score * 100).toFixed(2)}%</TableCell>
+                          <TableCell>{(item.no_fire_score * 100).toFixed(2)}%</TableCell>
+                          <TableCell className="capitalize">{item.label}</TableCell>
+                          <TableCell>{item.cam_name}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               ) : (
                 <p className="text-muted-foreground">No additional details available</p>
               )}
