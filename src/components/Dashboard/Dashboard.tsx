@@ -20,14 +20,18 @@ export const Dashboard = () => {
     gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
+  console.log('Cameras loaded:', cameras);
+
   // Cache camera data for 1 minute and enable parallel queries
-  const { data: allCameraData = [], isLoading } = useQuery({
+  const { data: allCameraData = [], isLoading, error } = useQuery({
     queryKey: ['all-camera-data'],
     queryFn: async () => {
       try {
+        console.log('Fetching camera data for cameras:', cameras);
         // Use Promise.all for parallel fetching
         const promises = cameras.map(camera => getCameraData(camera.id));
         const results = await Promise.all(promises);
+        console.log('Camera data results:', results);
         return results.flat();
       } catch (error) {
         console.error('Error fetching camera data:', error);
@@ -36,7 +40,7 @@ export const Dashboard = () => {
           description: "Failed to load camera data.",
           variant: "destructive"
         });
-        return [];
+        throw error;
       }
     },
     enabled: cameras.length > 0,
@@ -44,24 +48,37 @@ export const Dashboard = () => {
     gcTime: 2 * 60 * 1000, // 2 minutes
   });
 
+  console.log('All camera data:', allCameraData);
+  console.log('Loading state:', isLoading);
+  console.log('Error state:', error);
+
   // Memoize filtered data to prevent unnecessary recalculations
   const filteredData = useMemo(() => {
-    if (!allCameraData?.length) return [];
+    if (!allCameraData?.length) {
+      console.log('No camera data available to filter');
+      return [];
+    }
     
     const now = Date.now();
     const twentyFourHoursAgo = now - (24 * 60 * 60 * 1000);
     
-    return allCameraData.filter(data => {
+    const filtered = allCameraData.filter(data => {
       const timestamp = data.timestamp * 1000;
       return timestamp >= twentyFourHoursAgo && timestamp <= now;
     });
+
+    console.log('Filtered data:', filtered);
+    return filtered;
   }, [allCameraData]);
 
   // Memoize fire alerts calculation
   const fireAlerts = useMemo(() => {
-    if (!cameras?.length || !filteredData?.length) return [];
+    if (!cameras?.length || !filteredData?.length) {
+      console.log('No data available for fire alerts');
+      return [];
+    }
 
-    return cameras
+    const alerts = cameras
       .map(camera => {
         const cameraData = filteredData.filter(data => data.cam_name === camera.id);
         if (!cameraData.length) return null;
@@ -76,6 +93,9 @@ export const Dashboard = () => {
         } : null;
       })
       .filter(Boolean);
+
+    console.log('Fire alerts:', alerts);
+    return alerts;
   }, [cameras, filteredData]);
 
   // Memoize statistics calculations
@@ -85,19 +105,25 @@ export const Dashboard = () => {
       ? Number((filteredData.reduce((acc, curr) => acc + (curr.fire_score * 100), 0) / filteredData.length).toFixed(2))
       : 0;
 
-    return {
+    const statsData = {
       totalCameras: cameras.length,
       activeFires,
       averageProbability,
       totalReadings: filteredData.length
     };
+
+    console.log('Dashboard stats:', statsData);
+    return statsData;
   }, [cameras.length, fireAlerts.length, filteredData]);
 
   // Memoize chart data preparation
   const chartData = useMemo(() => {
-    if (!filteredData?.length) return [];
+    if (!filteredData?.length) {
+      console.log('No data available for chart');
+      return [];
+    }
 
-    return filteredData
+    const data = filteredData
       .reduce((acc: any[], curr) => {
         const timestamp = new Date(curr.timestamp * 1000);
         const hour = timestamp.getHours().toString().padStart(2, '0');
@@ -116,6 +142,9 @@ export const Dashboard = () => {
         return acc;
       }, [])
       .sort((a, b) => a.time.localeCompare(b.time));
+
+    console.log('Chart data:', data);
+    return data;
   }, [filteredData]);
 
   if (isLoading) {
