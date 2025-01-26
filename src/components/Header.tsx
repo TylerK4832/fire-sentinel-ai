@@ -1,14 +1,15 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Bell, Grid, LayoutDashboard } from "lucide-react";
+import { Bell, Grid, LayoutDashboard, Flame } from "lucide-react";
 
 export const Header = () => {
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm border-b">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link to="/" className="text-xl font-semibold">
-            Wildfire Monitor
+          <Link to="/" className="flex items-center gap-2 text-xl font-semibold">
+            <Flame className="h-6 w-6 text-primary" />
+            firesentinel.ai
           </Link>
           <nav className="flex items-center gap-4">
             <Button variant="ghost" asChild>
