@@ -15,7 +15,7 @@ export const TrendChart = ({ data }: TrendChartProps) => {
   return (
     <Card className="glass-morphism">
       <CardContent className={`pt-6 ${isMobile ? 'px-2' : 'px-6'}`}>
-        <h2 className="text-lg font-semibold mb-4 text-gradient">Last 24 Hours Average Fire Probability</h2>
+        <h2 className="text-lg font-semibold mb-4 text-gradient">Fire Probability</h2>
         <div className={`${isMobile ? 'h-[250px]' : 'h-[300px]'}`}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart 
@@ -39,7 +39,7 @@ export const TrendChart = ({ data }: TrendChartProps) => {
                 className="text-xs"
                 tick={{ fill: 'currentColor' }}
                 label={{ 
-                  value: 'Avg Fire Probability (%)', 
+                  value: 'Fire Probability (%)', 
                   angle: -90, 
                   position: 'insideLeft',
                   fill: 'currentColor',

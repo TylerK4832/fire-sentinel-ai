@@ -137,7 +137,7 @@ export const SingleCamera = () => {
 
             <Card className="glass-morphism">
               <CardContent className={`pt-6 ${isMobile ? 'px-2' : 'px-6'}`}>
-                <h2 className="text-lg font-semibold mb-4 text-gradient">Last 24 Hours Fire Detection Probability</h2>
+                <h2 className="text-lg font-semibold mb-4 text-gradient">Fire Probability</h2>
                 {chartData.length > 0 ? (
                   <div className={`${isMobile ? 'h-[250px]' : 'h-[300px]'}`}>
                     <ResponsiveContainer width="100%" height="100%">
