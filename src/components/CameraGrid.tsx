@@ -4,7 +4,7 @@ import { CameraFeed } from "./CameraFeed";
 import { useToast } from "../hooks/use-toast";
 import { useState } from "react";
 import { Input } from "./ui/input";
-import { Search } from "lucide-react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -22,6 +22,7 @@ export const CameraGrid = () => {
   const { toast } = useToast();
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   
   const { data: cameras = [], isLoading } = useQuery({
     queryKey: ['cameras'],
@@ -39,19 +40,24 @@ export const CameraGrid = () => {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-6">Camera Dashboard</h1>
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
+      <div className="container mx-auto px-4 py-8">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] glass-morphism rounded-lg p-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+          <p className="mt-4 text-muted-foreground">Loading cameras...</p>
         </div>
       </div>
     );
   }
 
-  // Filter cameras based on search query
-  const filteredCameras = cameras.filter(camera => 
-    camera.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // Filter and sort cameras
+  const filteredCameras = cameras
+    .filter(camera => 
+      camera.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    .sort((a, b) => {
+      const comparison = a.name.localeCompare(b.name);
+      return sortOrder === "asc" ? comparison : -comparison;
+    });
 
   const totalPages = Math.ceil(filteredCameras.length / CAMERAS_PER_PAGE);
   const startIndex = (currentPage - 1) * CAMERAS_PER_PAGE;
@@ -79,30 +85,66 @@ export const CameraGrid = () => {
   const pageNumbers = getPageNumbers();
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">Camera Dashboard</h1>
+    <div className="container mx-auto px-4 py-8">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2 text-gradient">Camera Dashboard</h1>
+        <p className="text-muted-foreground">Monitoring {cameras.length} locations in real-time</p>
+      </div>
       
-      {/* Search Bar with max-width */}
-      <div className="relative mb-6 max-w-md mx-auto">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-        <Input
-          type="text"
-          placeholder="Search cameras..."
-          value={searchQuery}
-          onChange={(e) => {
-            setSearchQuery(e.target.value);
-            setCurrentPage(1); // Reset to first page when searching
-          }}
-          className="pl-10 text-foreground"
-        />
+      {/* Search and Filter Controls */}
+      <div className="glass-morphism rounded-lg p-6 mb-8">
+        <div className="flex flex-col md:flex-row gap-4 items-center">
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
+            <Input
+              type="text"
+              placeholder="Search cameras by name..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="pl-10 bg-background/50"
+            />
+          </div>
+          <button
+            onClick={() => setSortOrder(order => order === "asc" ? "desc" : "asc")}
+            className="flex items-center gap-2 px-4 py-2 rounded-md hover:bg-white/5 transition-colors"
+          >
+            <SlidersHorizontal className="h-4 w-4 text-muted-foreground" />
+            <span className="text-sm text-muted-foreground">
+              Sort {sortOrder === "asc" ? "A-Z" : "Z-A"}
+            </span>
+          </button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 mb-8">
+      {/* Results Summary */}
+      <div className="text-sm text-muted-foreground mb-4">
+        Showing {currentCameras.length} of {filteredCameras.length} cameras
+      </div>
+
+      {/* Camera Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
         {currentCameras.map((camera) => (
-          <CameraFeed key={camera.id} camera={camera} />
+          <div key={camera.id} className="glass-morphism rounded-lg overflow-hidden">
+            <CameraFeed camera={camera} />
+          </div>
         ))}
       </div>
 
+      {/* Empty State */}
+      {currentCameras.length === 0 && (
+        <div className="flex flex-col items-center justify-center py-12 text-center">
+          <Search className="h-12 w-12 text-muted-foreground mb-4" />
+          <h3 className="text-lg font-medium mb-2">No cameras found</h3>
+          <p className="text-muted-foreground">
+            Try adjusting your search query
+          </p>
+        </div>
+      )}
+
+      {/* Pagination */}
       {totalPages > 1 && (
         <Pagination className="mb-8">
           <PaginationContent>
