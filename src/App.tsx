@@ -20,8 +20,8 @@ const App = () => (
           <Header />
           <main className="pt-20">
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/cameras" element={<CameraGrid />} />
+              <Route path="/" element={<CameraGrid />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/camera/:id" element={<SingleCamera />} />
             </Routes>
           </main>

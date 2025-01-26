@@ -1,9 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
-import { Flame } from "lucide-react";
+import { Flame, LayoutDashboard } from "lucide-react";
 
 export const Header = () => {
   const location = useLocation();
-  const isHome = location.pathname === "/";
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background border-b border-white/10">
@@ -14,6 +13,18 @@ export const Header = () => {
             firesentinel<span className="text-orange-500">.ai</span>
           </span>
         </Link>
+        
+        <nav>
+          <Link 
+            to="/dashboard" 
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors hover:bg-white/5 ${
+              location.pathname === '/dashboard' ? 'text-orange-500' : 'text-white'
+            }`}
+          >
+            <LayoutDashboard className="h-5 w-5" />
+            <span>Dashboard</span>
+          </Link>
+        </nav>
       </div>
     </header>
   );
