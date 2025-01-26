@@ -18,14 +18,3 @@ export const getCameras = (): Camera[] => {
     link: camera.link
   }));
 };
-
-export const getCameraById = (id: string): Camera | undefined => {
-  const camera = typedCamerasData.find(camera => camera.id === id);
-  if (!camera) return undefined;
-  
-  return {
-    id: camera.id,
-    name: camera.name,
-    link: camera.link
-  };
-};
