@@ -1,5 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import twilio from 'npm:twilio'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -28,25 +28,19 @@ serve(async (req) => {
 
     const { to, message } = await req.json() as SendSMSBody
 
-    const twilioUrl = `https://api.twilio.com/2010-04-01/Accounts/${TWILIO_ACCOUNT_SID}/Messages.json`
+    // Initialize Twilio client
+    const client = twilio(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     
-    const response = await fetch(twilioUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Authorization': `Basic ${btoa(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`)}`,
-      },
-      body: new URLSearchParams({
-        To: to,
-        From: TWILIO_PHONE_NUMBER,
-        Body: message,
-      }),
+    // Send message using Twilio client
+    const result = await client.messages.create({
+      body: message,
+      to: to,
+      from: TWILIO_PHONE_NUMBER,
     })
 
-    const result = await response.json()
-    console.log('SMS sent:', result)
+    console.log('SMS sent successfully:', result.sid)
 
-    return new Response(JSON.stringify(result), {
+    return new Response(JSON.stringify({ success: true, messageId: result.sid }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 200,
     })
