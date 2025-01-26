@@ -1,13 +1,4 @@
 project_id = "yszhslsluycamhnfwzgz"
 
-[functions.get-camera-data]
-verify_jwt = false
-
-[functions.send-sms]
-verify_jwt = false
-
-[functions.send-sms-via-email]
-verify_jwt = false
-
-[functions.check-fire-alerts]
+[functions.get-secret]
 verify_jwt = false
