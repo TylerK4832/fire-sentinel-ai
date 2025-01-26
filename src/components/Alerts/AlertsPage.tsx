@@ -58,6 +58,20 @@ export const AlertsPage = () => {
     enabled: !!session?.user?.id,
   });
 
+  const sendWelcomeMessage = async (phoneNumber: string) => {
+    const { error } = await supabase.functions.invoke('send-sms', {
+      body: {
+        to: phoneNumber,
+        message: "Welcome to FireWatch! You'll now receive alerts when potential fires are detected by your selected cameras.",
+      },
+    });
+    
+    if (error) {
+      console.error('Error sending welcome message:', error);
+      throw error;
+    }
+  };
+
   const createSubscription = useMutation({
     mutationFn: async () => {
       const { error } = await supabase.from("alert_subscriptions").insert({
@@ -67,6 +81,9 @@ export const AlertsPage = () => {
       });
 
       if (error) throw error;
+
+      // Send welcome message after successful subscription
+      await sendWelcomeMessage(phoneNumber);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["alert-subscriptions"] });
