@@ -6,14 +6,9 @@ import { CameraFeed } from "./CameraFeed";
 import { Button } from "./ui/button";
 import { Card, CardContent } from "./ui/card";
 import { useToast } from "../hooks/use-toast";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
+import { Alert, AlertTitle, AlertDescription } from "./ui/alert";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AlertTriangle, CheckCircle2 } from "lucide-react";
 
 export const SingleCamera = () => {
   const { id } = useParams();
@@ -52,10 +47,14 @@ export const SingleCamera = () => {
     );
   }
 
-  // Convert timestamp to readable date
-  const formatTimestamp = (timestamp: number) => {
-    return new Date(timestamp * 1000).toLocaleString();
-  };
+  // Format data for the chart
+  const chartData = cameraDetails?.map((item: any) => ({
+    time: new Date(item.timestamp * 1000).toLocaleTimeString(),
+    fireScore: Number((item.fire_score * 100).toFixed(2))
+  })) || [];
+
+  // Check if any entries are labeled as fire
+  const hasFireDetection = cameraDetails?.some((item: any) => item.label === "fire");
 
   return (
     <div className="container mx-auto p-4">
@@ -71,7 +70,29 @@ export const SingleCamera = () => {
           <CameraFeed camera={camera} large />
         </div>
         
-        <div>
+        <div className="space-y-6">
+          {/* Fire Status Alert */}
+          <Alert variant={hasFireDetection ? "destructive" : "default"}>
+            {hasFireDetection ? (
+              <>
+                <AlertTriangle className="h-5 w-5" />
+                <AlertTitle>Fire Detected!</AlertTitle>
+                <AlertDescription>
+                  This camera has detected potential fire activity. Please check the feed and contact emergency services if necessary.
+                </AlertDescription>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="h-5 w-5" />
+                <AlertTitle>No Fire Detected</AlertTitle>
+                <AlertDescription>
+                  Current readings indicate normal conditions with no fire detection.
+                </AlertDescription>
+              </>
+            )}
+          </Alert>
+
+          {/* Chart Card */}
           <Card>
             <CardContent className="pt-6">
               {isLoadingDetails ? (
@@ -79,32 +100,45 @@ export const SingleCamera = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-foreground" />
                 </div>
               ) : cameraDetails && cameraDetails.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Time</TableHead>
-                        <TableHead>Fire Score</TableHead>
-                        <TableHead>No Fire Score</TableHead>
-                        <TableHead>Label</TableHead>
-                        <TableHead>Camera</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {cameraDetails.map((item: any) => (
-                        <TableRow key={item.id}>
-                          <TableCell>{formatTimestamp(item.timestamp)}</TableCell>
-                          <TableCell>{(item.fire_score * 100).toFixed(2)}%</TableCell>
-                          <TableCell>{(item.no_fire_score * 100).toFixed(2)}%</TableCell>
-                          <TableCell className="capitalize">{item.label}</TableCell>
-                          <TableCell>{item.cam_name}</TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
+                <div className="h-[300px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <LineChart data={chartData}>
+                      <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
+                      <XAxis 
+                        dataKey="time" 
+                        className="text-xs"
+                        tick={{ fill: 'currentColor' }}
+                      />
+                      <YAxis 
+                        className="text-xs"
+                        tick={{ fill: 'currentColor' }}
+                        label={{ 
+                          value: 'Fire Score (%)', 
+                          angle: -90, 
+                          position: 'insideLeft',
+                          fill: 'currentColor'
+                        }}
+                      />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: 'var(--background)',
+                          border: '1px solid var(--border)',
+                          borderRadius: '0.5rem'
+                        }}
+                      />
+                      <Line 
+                        type="monotone" 
+                        dataKey="fireScore" 
+                        stroke="var(--destructive)" 
+                        strokeWidth={2}
+                        dot={false}
+                        activeDot={{ r: 6 }}
+                      />
+                    </LineChart>
+                  </ResponsiveContainer>
                 </div>
               ) : (
-                <p className="text-muted-foreground">No additional details available</p>
+                <p className="text-muted-foreground">No data available</p>
               )}
             </CardContent>
           </Card>
