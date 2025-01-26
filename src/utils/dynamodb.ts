@@ -4,8 +4,8 @@ import { DynamoDBDocumentClient, GetCommand } from "@aws-sdk/lib-dynamodb";
 const client = new DynamoDBClient({
   region: "us-east-1", // Update this to your region
   credentials: {
-    accessKeyId: import.meta.env.VITE_AWS_ACCESS_KEY_ID || "",
-    secretAccessKey: import.meta.env.VITE_AWS_SECRET_ACCESS_KEY || "",
+    accessKeyId: localStorage.getItem("AWS_ACCESS_KEY_ID") || "",
+    secretAccessKey: localStorage.getItem("AWS_SECRET_ACCESS_KEY") || "",
   },
 });
 
