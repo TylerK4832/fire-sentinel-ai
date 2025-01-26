@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { SmtpClient } from "https://deno.land/x/smtp@v0.7.0/mod.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -48,35 +47,45 @@ serve(async (req) => {
 
     // Remove country code if present
     const phoneNumber = cleanNumber.length === 11 ? cleanNumber.substring(1) : cleanNumber;
-
-    const client = new SmtpClient();
     
     const emailTo = `${phoneNumber}@${carrierGateways.default}`;
     console.log('Target email address:', emailTo);
 
     try {
-      console.log('Attempting SMTP connection...');
+      console.log('Preparing email data...');
 
-      await client.connectTLS({
-        hostname: "smtp.gmail.com",
-        port: 465, // Using secure port 465 instead of 587
-        username: SMTP_USERNAME,
-        password: SMTP_PASSWORD,
-      });
-
-      console.log('SMTP connection established');
-
-      await client.send({
-        from: FROM_EMAIL,
-        to: emailTo,
-        subject: "",
-        content: message,
-      });
-
-      console.log('Message sent successfully');
+      const encoder = new TextEncoder();
+      const emailContent = `From: ${FROM_EMAIL}\r\nTo: ${emailTo}\r\nSubject: \r\n\r\n${message}`;
       
-      await client.close();
-      console.log('SMTP connection closed');
+      const conn = await Deno.connect({ hostname: "smtp.gmail.com", port: 465 });
+      const tlsConn = await Deno.startTls(conn, { hostname: "smtp.gmail.com" });
+      
+      // SMTP handshake
+      await readResponse(tlsConn); // Read greeting
+      await writeCommand(tlsConn, `EHLO localhost\r\n`);
+      await readResponse(tlsConn);
+      
+      // Authentication
+      await writeCommand(tlsConn, "AUTH LOGIN\r\n");
+      await readResponse(tlsConn);
+      await writeCommand(tlsConn, `${btoa(SMTP_USERNAME)}\r\n`);
+      await readResponse(tlsConn);
+      await writeCommand(tlsConn, `${btoa(SMTP_PASSWORD)}\r\n`);
+      await readResponse(tlsConn);
+      
+      // Send email
+      await writeCommand(tlsConn, `MAIL FROM:<${FROM_EMAIL}>\r\n`);
+      await readResponse(tlsConn);
+      await writeCommand(tlsConn, `RCPT TO:<${emailTo}>\r\n`);
+      await readResponse(tlsConn);
+      await writeCommand(tlsConn, "DATA\r\n");
+      await readResponse(tlsConn);
+      await writeCommand(tlsConn, emailContent + "\r\n.\r\n");
+      await readResponse(tlsConn);
+      await writeCommand(tlsConn, "QUIT\r\n");
+      
+      tlsConn.close();
+      console.log('Email sent successfully');
 
       return new Response(JSON.stringify({ 
         success: true,
@@ -87,11 +96,6 @@ serve(async (req) => {
       });
     } catch (smtpError) {
       console.error('SMTP Error:', smtpError);
-      try {
-        await client.close();
-      } catch (closeError) {
-        console.error('Error closing SMTP connection:', closeError);
-      }
       throw smtpError;
     }
   } catch (error) {
@@ -110,3 +114,16 @@ serve(async (req) => {
     });
   }
 })
+
+// Helper functions for SMTP communication
+async function readResponse(conn: Deno.TlsConn): Promise<string> {
+  const buffer = new Uint8Array(1024);
+  const n = await conn.read(buffer);
+  if (n === null) throw new Error("Connection closed");
+  return new TextDecoder().decode(buffer.subarray(0, n));
+}
+
+async function writeCommand(conn: Deno.TlsConn, command: string): Promise<void> {
+  const encoder = new TextEncoder();
+  await conn.write(encoder.encode(command));
+}
