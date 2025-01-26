@@ -7,8 +7,6 @@ import { LoadingSpinner } from "./LoadingSpinner";
 import { DashboardHeader } from "./DashboardHeader";
 import { TrendChart } from "./TrendChart";
 import { useToast } from "../../hooks/use-toast";
-import { Link } from "react-router-dom";
-import { Grid } from "lucide-react";
 
 export const Dashboard = () => {
   const { toast } = useToast();
@@ -88,14 +86,6 @@ export const Dashboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 min-h-screen">
-      <Link 
-        to="/" 
-        className="inline-flex items-center gap-2 text-white hover:text-orange-500 transition-colors mb-6"
-      >
-        <Grid className="h-5 w-5" />
-        <span>All Cameras</span>
-      </Link>
-
       <DashboardHeader 
         title="Wildfire Monitoring Dashboard"
         description="Real-time fire detection analytics across all cameras"
